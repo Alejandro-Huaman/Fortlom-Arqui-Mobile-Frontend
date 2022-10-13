@@ -6,7 +6,7 @@ import 'dart:convert';
 
 class ArtistService {
   var log=Logger();
-  var baseUrl = "http://192.168.1.45:8080/api/v1";
+  var baseUrl = "http://192.168.1.28:8080/api/v1";
   Future<List<ArtistResource>> getallArtists() async{
     final response = await http.get(Uri.parse(baseUrl + "/artists"));
     List<ArtistResource>artists=[];

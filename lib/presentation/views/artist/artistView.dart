@@ -108,7 +108,7 @@ class _ItemListState extends State<ItemList> {
               child: Column(
                 children: [
                   Container(
-                    child: Image.network(artistList![index].content),
+                    child: Image.network(artistList![index].content!),
                     height: 200,
                   ),
 

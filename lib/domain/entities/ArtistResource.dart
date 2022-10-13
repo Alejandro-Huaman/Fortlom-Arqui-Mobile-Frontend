@@ -13,7 +13,7 @@ class ArtistResource{
 
   final String password;
 
-  final String content;
+  final String? content;
 
   int artistfollowers;
 
