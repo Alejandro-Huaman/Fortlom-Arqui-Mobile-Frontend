@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fortloom/presentation/views/chat/chat.dart';
 import 'package:fortloom/presentation/views/event/eventmainview.dart';
+import 'package:fortloom/presentation/views/home/homeScreen.dart';
 import 'package:fortloom/presentation/views/login_register/login.dart';
 import 'package:fortloom/presentation/views/Forum/ForumSection.Dart.dart';
 import 'package:fortloom/presentation/views/Forum/ForumPage.dart';
