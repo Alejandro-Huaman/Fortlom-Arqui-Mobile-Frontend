@@ -6,7 +6,7 @@ import 'package:logger/logger.dart';
 import 'dart:convert';
 class ForumService {
 
-  var baseUrl="http://192.168.0.201:8083/api/v1/forumservice";
+  var baseUrl="http://192.168.43.65:8083/api/v1/forumservice";
   var log=Logger();
   Future<List<ForumResource>> getall() async
   {

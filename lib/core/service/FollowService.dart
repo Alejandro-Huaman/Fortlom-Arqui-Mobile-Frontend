@@ -7,7 +7,7 @@ import 'dart:convert';
 
 class FollowService {
   var log=Logger();
-  var baseUrl = "http://192.168.0.201:8085/api/v1/supportservice";
+  var baseUrl = "http://192.168.43.65:8085/api/v1/supportservice";
 
   Future<http.Response> createFollow(int artistId, int fanaticId,bool followbool) async{
     final response = await http.post(Uri.parse("${baseUrl}/artists/${artistId}/fanatics/${fanaticId}/boolfollow/${followbool}/follows"));
