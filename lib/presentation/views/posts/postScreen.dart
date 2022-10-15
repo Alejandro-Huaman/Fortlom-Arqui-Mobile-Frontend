@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fortloom/core/framework/colors.dart';
 import 'package:fortloom/core/framework/globals.dart';
+import 'package:fortloom/core/service/AuthService.dart';
 import 'package:fortloom/core/service/PostService.dart';
+import 'package:fortloom/core/service/PublicationService.dart';
 import 'package:fortloom/domain/entities/PostResource.dart';
+import 'package:fortloom/domain/entities/PublicationResource.dart';
 import 'package:fortloom/presentation/views/posts/widgets/post.dart';
 import 'package:fortloom/presentation/widgets/screenBase.dart';
 import 'package:fortloom/presentation/widgets/sideBar/navigationBloc.dart';
@@ -18,17 +21,43 @@ class _PostScreenState extends State<PostScreen> {
   final TextEditingController _newPostDescripController =
       TextEditingController();
   final TextEditingController _newPostTitleController = TextEditingController();
-  final PostService _postService = PostService();
-  List<Post> lstPosts = [];
+  final PublicationService _postService = PublicationService();
+  final AuthService authService=AuthService();
+  List<PublicationResource> lstPosts = [];
+  int userId=0;
+  String username = "Usuario";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+
+    String tep;
+
+    this.authService.getToken().then((result) {
+      setState(() {
+        tep = result.toString();
+        username = this.authService.GetUsername(tep);
+
+        this.authService.getperson(username).then((result) {
+          setState(() {
+            userId = result.id;
+          });
+        });
+      });
+    });
+
+
+
+
+
     _postService.getall().then((value) {
       setState(() {
         lstPosts = value;
+
       });
     });
+
   }
 
   @override
@@ -99,22 +128,7 @@ class _PostScreenState extends State<PostScreen> {
             ),
             Column(
               children: [
-                Container(
-                  margin: const EdgeInsets.all(12),
-                  height: 4 * 15,
-                  child: TextField(
-                    controller: _newPostTitleController,
-                    maxLines: 4,
-                    decoration: InputDecoration(
-                      border: getBorder(false),
-                      enabledBorder: getBorder(false),
-                      focusedBorder: getBorder(true),
-                      hintText: "Enter a title for your post",
-                      fillColor: Colors.white,
-                      filled: true,
-                    ),
-                  ),
-                ),
+
                 Container(
                   margin: const EdgeInsets.all(12),
                   height: 4 * 18.0,
@@ -149,8 +163,8 @@ class _PostScreenState extends State<PostScreen> {
                       backgroundColor: MaterialStateProperty.all(goldPrimary),
                     ),
                     onPressed: () {
-                      _postService.addPost(_newPostTitleController.text,
-                          _newPostDescripController.text, 1);
+                      _postService.addPost(
+                          _newPostDescripController.text, userId,"false");
                       _newPostDescripController.clear();
                       _newPostTitleController.clear();
                     },

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:fortloom/core/framework/colors.dart';
 import 'package:fortloom/core/framework/globals.dart';
@@ -5,8 +7,9 @@ import 'package:fortloom/core/service/AuthService.dart';
 import 'package:fortloom/core/service/ReportService.dart';
 
 class reportDialog extends StatefulWidget {
-  const reportDialog({Key? key, required this.userReported}) : super(key: key);
+  const reportDialog({Key? key, required this.userReported, required this.publicationid}) : super(key: key);
   final int userReported;
+  final int publicationid;
   @override
   State<reportDialog> createState() => _reportDialogState();
 }
@@ -99,8 +102,8 @@ class _reportDialogState extends State<reportDialog> {
                       ),
                     ),
                     onPressed: () {
-                      _reportService.createreport(_newReportController.text,
-                          userId, widget.userReported);
+                      _reportService.createforpublication(
+                          userId, widget.userReported,widget.publicationid,_newReportController.text);
                       Navigator.pop(context);
                     },
                   ),

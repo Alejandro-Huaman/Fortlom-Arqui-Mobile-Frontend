@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:fortloom/core/framework/colors.dart';
 import 'package:fortloom/core/framework/globals.dart';
+import 'package:fortloom/core/service/AuthService.dart';
+import 'package:fortloom/core/service/ImageUserService.dart';
 import 'package:fortloom/presentation/views/event/eventmainview.dart';
 import 'package:fortloom/presentation/views/login_register/login.dart';
 import 'package:fortloom/presentation/widgets/circlularimg.dart';
@@ -12,6 +14,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:fortloom/presentation/views/Forum/ForumSection.Dart.dart';
+
+import '../../../domain/entities/ImageResource.dart';
+import '../../../domain/entities/PersonResource.dart';
 class SideBar extends StatefulWidget {
   @override
   _SideBarState createState() => _SideBarState();
@@ -24,7 +29,15 @@ class _SideBarState extends State<SideBar>
   late Stream<bool> isSidebarOpenedStream;
   late StreamSink<bool> isSidebarOpenedSink;
   final _animationDuration = const Duration(milliseconds: 400);
-
+  AuthService authService=AuthService();
+  ImageUserService imageUserService=ImageUserService();
+  PersonResource personResource= new PersonResource(0, "username", "realname", "lastname", "email", "password");
+  ImageResource imageResource=new ImageResource(0, "imagenUrl", 0, "0", 0);
+   bool isfanaitc=false;
+   String Username="Usuario";
+   String name="";
+  String lastname="";
+  String email="";
   @override
   void initState() {
     super.initState();
@@ -33,6 +46,25 @@ class _SideBarState extends State<SideBar>
     isSidebarOpenedStreamController = PublishSubject<bool>();
     isSidebarOpenedStream = isSidebarOpenedStreamController.stream;
     isSidebarOpenedSink = isSidebarOpenedStreamController.sink;
+    this.authService.getToken().then((value){
+      isfanaitc = this.authService.isfanatic(value.toString());
+      Username= this.authService.GetUsername(value.toString());
+      this.authService.getperson(Username).then((result) {
+        setState(() {
+          personResource=result;
+          name=personResource.realname;
+          lastname=personResource.lastname;
+          email=personResource.email;
+          this.imageUserService.getImageByUserId(personResource.id).then((value){
+            setState(() {
+              this.imageResource = value[0];
+            });
+          });
+        });
+
+
+      });
+    });
   }
 
   @override
@@ -99,24 +131,26 @@ class _SideBarState extends State<SideBar>
                         child: Row(
                           // ignore: prefer_const_literals_to_create_immutables
                           children: [
-                            const Padding(
+                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               child:
-                                  CircularImg(pathImg: 'assets/imgs/male.png'),
+                              CircleAvatar(backgroundImage:NetworkImage(this.imageResource.imagenUrl),),
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
-                                  'Pedro Perez',
+                                  "${this.name}  ${this.lastname}",
+
                                   style: TextStyle(
                                       color: txtPrimaryWhite,
                                       fontSize: 24,
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w700),
                                 ),
+
                                 Text(
-                                  'Pedperez@gmail.com',
+                                  "${this.email} ",
                                   style: TextStyle(
                                       color: txtPrimaryWhite,
                                       fontSize: 12,
@@ -168,7 +202,10 @@ class _SideBarState extends State<SideBar>
                       },
                     ),
                     dividerLine(),
-                    MenuItemS(
+
+
+                    if(isfanaitc)...[
+                         MenuItemS(
                       icon: Icons.person,
                       title: "Artist",
                       onTap: () {
@@ -177,7 +214,8 @@ class _SideBarState extends State<SideBar>
                             .add(NavigationEvents.ArtistScreenClickedEvent);
                       },
                     ),
-                    dividerLine(),
+                         dividerLine(),
+                    ],
                     MenuItemS(
                       icon: Icons.settings,
                       title: "Configure",

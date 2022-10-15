@@ -1,16 +1,23 @@
+import 'dart:ffi';
+
 import 'package:fortloom/domain/entities/PersonResource.dart';
 
 class ReportResource{
 
 final int id;
 
-final String reportDescription;
+final String description;
 
-final PersonResource userMain;
+final int userMain;
 
-final PersonResource userReported;
+final int userReported;
+final int publicationId;
 
-ReportResource(this.id,this.reportDescription,this.userMain,this.userReported);
+final int forumId;
+
+final int commentId;
+
+      ReportResource(this.id, this.description, this.userMain, this.userReported, this.publicationId, this.forumId, this.commentId);
 
 
 }

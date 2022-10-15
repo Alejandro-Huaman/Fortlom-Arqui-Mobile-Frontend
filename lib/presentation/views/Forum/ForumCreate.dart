@@ -30,9 +30,12 @@ class _ForumCreateState extends State<ForumCreate> {
 
     this.authService.getToken().then((result) {
       setState(() {
-        tep = result.toString();
-        username = this.authService.GetUsername(tep);
 
+        tep = result.toString();
+        print("tep");
+        print(tep);
+        username = this.authService.GetUsername(tep);
+        print(username);
         this.authService.getperson(username).then((result) {
           setState(() {
             personResource = result;

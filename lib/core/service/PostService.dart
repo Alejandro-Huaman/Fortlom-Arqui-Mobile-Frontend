@@ -13,10 +13,10 @@ String currentDate() {
 }
 
 class PostService {
-  var baseUrl = "http://192.168.0.102:8080/api/v1/publications";
+  var baseUrl = "http://192.168.0.102:8080/api/v1/contentservice";
   var log = Logger();
   Future<List<Post>> getall() async {
-    final response = await http.get(Uri.parse(baseUrl));
+    final response = await http.get(Uri.parse(baseUrl+"/publications"));
     List<Post> lstPosts = [];
     log.i(response.body);
     log.i(response.statusCode);
@@ -30,7 +30,6 @@ class PostService {
           item["artist"]["lastname"],
           item["artist"]["email"],
           item["artist"]["password"],
-          item["artist"]["content"] ?? "",
           item["artist"]["artistfollowers"],
           item["artist"]["instagramLink"],
           item["artist"]["facebookLink"],
@@ -39,7 +38,7 @@ class PostService {
       Post postResource = Post(
           item["id"],
           item["publicationName"],
-          item["publicationDescription"],
+          item["description"],
           item["likes"],
           item["date"] ?? currentDate(),
           artist);

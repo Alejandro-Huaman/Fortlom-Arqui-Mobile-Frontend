@@ -181,7 +181,7 @@ class _EventState extends State<EventMainView> {
                           print("Fecha a utilizar: $fechadescription");
                           String fechaevento = DateFormat('yyyy-MM-ddTHH:mm:ss').format(fechadescription); //parse me ayuda para convertir un string a Datetime y format de datetime a string
                           print("Nueva Fecha convertida: $fechaevento");
-                          eventService.addEvents(nametextfield.text.trim(), descriptiontextfield.text.trim(), 0, fechaevento, personResource.id);
+                          eventService.addEvents(nametextfield.text.trim(), descriptiontextfield.text.trim(), "link", fechaevento, personResource.id);
                         },
                         child:Text("Create and Post"),
                         color:Colors.white

@@ -1,20 +1,26 @@
 
 import 'package:fortloom/domain/entities/ForumCommentResource.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'dart:convert';
 
 import '../../domain/entities/ForumResource.dart';
 import '../../domain/entities/PersonResource.dart';
-
+String currentDate() {
+  var now = DateTime.now();
+  var formatter = DateFormat('yyyy-MM-dd');
+  String formatted = formatter.format(now);
+  return formatted;
+}
 class ForumCommentService{
 
-var baseUrl="http://localhost:8080/api/v1/forums/{{forumId}}/forumcomments";
+var baseUrl="http://192.168.0.201:8084/api/v1/answerservice";
 var log=Logger();
 
 Future<List<ForumCommentResource>> getbyForumID(int id) async
 {
-  final response = await http.get(Uri.parse("http://192.168.1.45:8080/api/v1/forums/"+id.toString()+"/forumcomments"));
+  final response = await http.get(Uri.parse(baseUrl+"/forums/${id}/forumcomments"));
   List<ForumCommentResource>comments=[];
   log.i(response.body);
   log.i(response.statusCode);
@@ -22,13 +28,29 @@ Future<List<ForumCommentResource>> getbyForumID(int id) async
   final jsonData = jsonDecode(body);
   for (var item in jsonData["content"]){
 
-        PersonResource personResource= new PersonResource(item["person"]["id"],item["person"]["username"] ,item["person"]["realname"] ,item["person"]["lastname"] ,
-        item["person"]["email"], item["person"]["password"]);
-        PersonResource personResourcefroforum= new PersonResource(item["forum"]["person"]["id"],item["forum"]["person"]["username"] ,item["forum"]["person"]["realname"] ,item["forum"]["person"]["lastname"] ,
-            item["forum"]["person"]["email"], item["forum"]["person"]["password"]);
-        ForumResource forumResource = new ForumResource(item["forum"]["id"],item["forum"]["forumname"],item["forum"]["forumdescription"] , personResourcefroforum);
-        ForumCommentResource forumCommentResource= new ForumCommentResource(item["id"],item["commentdescription"] ,item["registerdate"] , personResource, forumResource);
-        comments.add(forumCommentResource);
+       PersonResource personResource= PersonResource(item["userAccount"]["id"], item["userAccount"]["username"],item["userAccount"]["realname"] ,
+           item["userAccount"]["lastname"] ,   item["userAccount"]["email"],item["userAccount"]["password"] );
+       PersonResource personResource2=PersonResource(0, "null", "null", "null", "null", "null");
+       ForumResource forumResource=ForumResource( item["forum"]["id"], item["forum"]["forumname"],item["forum"]["forumdescription"] ,
+           item["forum"]["forumrules"], personResource2);
+
+       if(item["registerdate"].runtimeType!=Null){
+         print(item["registerdate"].runtimeType);
+         DateTime tsdate = DateTime.fromMillisecondsSinceEpoch(item["registerdate"]);
+         print(tsdate);
+         ForumCommentResource forumCommentResource= new ForumCommentResource(item["id"],item["commentdescription"] ,tsdate ,
+             item["userid"] ,personResource, item["forumid"] ,forumResource);
+
+         comments.add(forumCommentResource);
+       }else{
+         ForumCommentResource forumCommentResource= new ForumCommentResource(item["id"],item["commentdescription"] ,item["registerdate"] ,
+             item["userid"] ,personResource, item["forumid"] ,forumResource);
+
+         comments.add(forumCommentResource);
+       }
+
+
+
 
   }
 
@@ -36,12 +58,18 @@ Future<List<ForumCommentResource>> getbyForumID(int id) async
 }
 
 Future<http.Response> addForumComment(String commentdescription,int id,int personid) async{
+  ;
+
+  DateFormat dateFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+  String date = dateFormat.format(DateTime.now());
+  print(date);
   Map data ={
+    'registerdate':'$date',
     'commentdescription': '$commentdescription',
 
   };
   var body = json.encode(data);
-  final response = await http.post(Uri.parse("http://192.168.0.201:8080/api/v1/users/"+personid.toString()+"/forums/"+id.toString()+"/forumcomments"),
+  final response = await http.post(Uri.parse("${baseUrl}/user/${personid}/forums/${id}/forumcomments"),
       headers: {"Content-Type": "application/json"}, body: body
   );
   log.i(response.body);
