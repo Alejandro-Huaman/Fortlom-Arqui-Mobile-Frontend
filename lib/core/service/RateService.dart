@@ -14,7 +14,7 @@ class RateService{
 
 
   Future<http.Response>  existbyartistoidandfanaticid(int artistoid,int fanaticid)async{
-    final response = await http.get(Uri.parse("${baseUrl}/check/{artistoid}/{fanaticid}/rates"));
+    final response = await http.get(Uri.parse("${baseUrl}/check/${artistoid}/${fanaticid}/rates"));
     log.i(response.body);
     log.i(response.statusCode);
     return response;
