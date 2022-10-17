@@ -13,7 +13,7 @@ import '../../domain/entities/ImageResource.dart';
 class ImageUserService{
 
   var log = Logger();
-  var baseUrl = "http://192.168.43.65:8086/api/v1/multimediaservice";
+  var baseUrl = "http://192.168.0.201:8086/api/v1/multimediaservice";
 
 
   Future<http.Response> createimageforuser(int userId,File file) async{

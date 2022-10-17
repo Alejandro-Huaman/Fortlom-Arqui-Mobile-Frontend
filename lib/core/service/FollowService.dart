@@ -7,7 +7,7 @@ import 'dart:convert';
 
 class FollowService {
   var log=Logger();
-  var baseUrl = "http://192.168.43.65:8085/api/v1/supportservice";
+  var baseUrl = "http://192.168.0.201:8085/api/v1/supportservice";
 
   Future<http.Response> createFollow(int artistId, int fanaticId,bool followbool) async{
     final response = await http.post(Uri.parse("${baseUrl}/artists/${artistId}/fanatics/${fanaticId}/boolfollow/${followbool}/follows"));
@@ -16,11 +16,11 @@ class FollowService {
     return response;
   }
 
-  Future<http.Response> existbyartistoidandfanaticid(int artistId, int fanaticId)async{
+  Future<String> existbyartistoidandfanaticid(int artistId, int fanaticId)async{
     final response = await http.get(Uri.parse("${baseUrl}/check/${artistId}/fanatics/${fanaticId}"));
     log.i(response.body);
     log.i(response.statusCode);
-    return response;
+    return response.body;
   }
   Future<List<FollowResource>>geybyartistoidandboleean(int artistId,bool boolagree)async{
     final response = await http.get(Uri.parse("${baseUrl}/artists/${artistId}/agreess/${boolagree}/opinions"));

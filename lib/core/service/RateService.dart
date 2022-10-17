@@ -9,15 +9,15 @@ import 'package:logger/logger.dart';
 import 'dart:convert';
 class RateService{
   var log=Logger();
-  var baseUrl = "http://192.168.43.65:8085/api/v1/supportservice";
+  var baseUrl = "http://192.168.0.201:8085/api/v1/supportservice";
 
 
 
-  Future<http.Response>  existbyartistoidandfanaticid(int artistoid,int fanaticid)async{
+  Future<String>  existbyartistoidandfanaticid(int artistoid,int fanaticid)async{
     final response = await http.get(Uri.parse("${baseUrl}/check/${artistoid}/${fanaticid}/rates"));
     log.i(response.body);
     log.i(response.statusCode);
-    return response;
+    return response.body;
   }
   Future<http.Response>createRate(int artistId,int fanaticId,double review)async{
     Map data ={

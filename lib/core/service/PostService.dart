@@ -13,7 +13,7 @@ String currentDate() {
 }
 
 class PostService {
-  var baseUrl = "http://192.168.43.65:8080/api/v1/contentservice";
+  var baseUrl = "http://192.168.0.201:8080/api/v1/contentservice";
   var log = Logger();
   Future<List<Post>> getall() async {
     final response = await http.get(Uri.parse(baseUrl+"/publications"));

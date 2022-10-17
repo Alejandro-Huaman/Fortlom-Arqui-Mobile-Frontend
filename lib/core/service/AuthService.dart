@@ -13,7 +13,7 @@ class AuthService {
     Map data = {'nombreUsuario': '$email', 'password': '$password'};
     var body = json.encode(data);
     final response = await http.post(
-        Uri.parse("http://192.168.43.65:8081/auth/login"),
+        Uri.parse("http://192.168.0.201:8081/auth/login"),
         headers: {"Content-Type": "application/json"},
         body: body);
     log.i(response.body);
@@ -40,7 +40,7 @@ class AuthService {
 
   Future<PersonResource> getperson(String getUsername) async {
     final response = await http.get(Uri.parse(
-        "http://192.168.43.65:8081/api/v1/userservice/users/users/Username/" + getUsername));
+        "http://192.168.0.201:8081/api/v1/userservice/users/users/Username/" + getUsername));
 
 
 

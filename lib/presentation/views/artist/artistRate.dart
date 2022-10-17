@@ -21,7 +21,7 @@ class _artistRateState extends State<artistRate> {
 
     this.rateService.existbyartistoidandfanaticid(widget.artistid,widget.userid).then((result) {
 
-          if(result==false){
+          if(result=="false"){
              this.rateService.createRate(widget.artistid,widget.userid, value).then((result) {
                Fluttertoast.showToast(
                    msg: "Nuevo Rate",

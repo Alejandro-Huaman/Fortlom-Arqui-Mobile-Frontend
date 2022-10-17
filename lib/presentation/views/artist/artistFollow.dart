@@ -30,14 +30,17 @@ class _artistFollowState extends State<artistFollow> {
   void checkfanaticandartisfollows(){
 
     this.followService.existbyartistoidandfanaticid(widget.artistid, widget.userid).then((value) {
+             print(value);
+             if(value=="false"){
 
-             if(value==false){
+                    print("no follows");
                     this.followService.createFollow(widget.artistid, widget.userid, true).then((value){
                       setState(() {
                         this.setfollows();
                       });
                     });
-             }else{
+             }
+             else{
                  this.followService.geybyartistoidandfanaticid(widget.artistid,  widget.userid).then((value) {
 
                                  this.followService.update(value, true).then((value){
@@ -61,7 +64,7 @@ class _artistFollowState extends State<artistFollow> {
 
     this.followService.existbyartistoidandfanaticid(widget.artistid, widget.userid).then((value) {
 
-      if(value==false){
+      if(value=="false"){
         this.followService.createFollow(widget.artistid, widget.userid, false).then((value){
           setState(() {
             this.setfollows();

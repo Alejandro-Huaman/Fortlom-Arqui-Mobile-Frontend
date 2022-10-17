@@ -12,7 +12,7 @@ import 'dart:convert';
 class OpinionService{
 
   var log=Logger();
-  var baseUrl = "http://192.168.43.65:8084/api/v1/answerservice";
+  var baseUrl = "http://192.168.0.201:8084/api/v1/answerservice";
   Future<int> getAllOpinionsByagreeandContentId(int contenid,bool agree)async{
 
     final response = await http.get(Uri.parse("${baseUrl}/content/${contenid}/agreess/${agree}/opinions"));

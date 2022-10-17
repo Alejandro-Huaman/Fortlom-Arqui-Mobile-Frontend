@@ -9,7 +9,7 @@ import 'dart:convert';
 //192.168.0.201
 class ArtistService {
   var log=Logger();
-  var baseUrl = "http://192.168.43.65:8081/api/v1/userservice/artists";
+  var baseUrl = "http://192.168.0.201:8081/api/v1/userservice/artists";
 
 
   Future<List<ArtistResource>> getallArtists() async{
