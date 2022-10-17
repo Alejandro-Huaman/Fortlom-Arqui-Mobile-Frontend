@@ -7,38 +7,53 @@ import 'dart:convert';
 
 class EventService{
 
-  var baseUrl = "http://192.168.1.45:8080/api/v1";
+  var baseUrl = "http://192.168.43.65:8082/api/v1/contentservice";
   var log = Logger();
 
   Future<List<EventResource>> getallEvents() async{
     final response = await http.get(Uri.parse(baseUrl + "/events"));
     List<EventResource>events=[];
-    log.i(response.body);
-    log.i(response.statusCode);
+
     String body = utf8.decode(response.bodyBytes);
     final jsonData = jsonDecode(body);
     for (var item in jsonData["content"]){
       ArtistResource artistResource= new ArtistResource(item["artist"]["id"],item["artist"]["username"] ,item["artist"]["realname"] ,item["artist"]["lastname"] ,
-          item["artist"]["email"], item["artist"]["password"],item["artist"]["content"], item["artist"]["artistfollowers"], item["artist"]["instagramLink"],
+          item["artist"]["email"], item["artist"]["password"],item["artist"]["artistfollowers"], item["artist"]["instagramLink"],
           item["artist"]["facebookLink"], item["artist"]["twitterLink"]);
 
-      print(artistResource);
+      if(item["releasedDate"].runtimeType!=Null){
 
-      EventResource eventResource = new EventResource(item["id"],item["eventname"],item["eventeescription"] , item["eventlikes"],item["registerdate"], artistResource);
+        DateTime tsdate = DateTime.fromMillisecondsSinceEpoch(item["registerdate"]);
+        DateTime tsdate2 = DateTime.fromMillisecondsSinceEpoch(item["releasedDate"]);
+
+        EventResource eventResource = new EventResource(item["id"],item["name"],item["description"] ,tsdate,artistResource,
+            item["artistid"],item["ticketLink"],tsdate2);
 
 
-      events.add(eventResource);
+        events.add(eventResource);
+
+      }else{
+        DateTime tsdate = DateTime.fromMillisecondsSinceEpoch(item["registerdate"]);
+        EventResource eventResource = new EventResource(item["id"],item["name"],item["description"] ,tsdate,artistResource,
+            item["artistid"],item["ticketLink"],item["releasedDate"]);
+
+
+        events.add(eventResource);
+
+      }
+
+
     }
-    print(events);
+
     return events;
   }
 
-  Future<http.Response> addEvents(String eventName, String eventDescription, int eventLikes, String registerDate, int ArtistId) async {
+  Future<http.Response> addEvents(String eventName, String eventDescription, String ticketLink, String registerDate, int ArtistId) async {
     Map data ={
-      'eventname': '$eventName',
-      'eventeescription': '$eventDescription',
-      'eventlikes': '$eventLikes',
-      'registerdate': '$registerDate'
+      'name': '$eventName',
+      'description': '$eventDescription',
+      'ticketLink': '$ticketLink',
+      'releasedDate': '$registerDate'
     };
     var body = json.encode(data);
     final response = await http.post(Uri.parse(baseUrl + "/artist/"+ArtistId.toString()+"/events"),
@@ -50,18 +65,10 @@ class EventService{
     return response;
   }
 
-  Future<http.Response> updateEvents(int eventLikes,int EventId) async{
-    Map data ={
-      'eventlikes': '$eventLikes'
-    };
-
-    var body = json.encode(data);
-    final response = await http.put(Uri.parse(baseUrl + "/event/"+EventId.toString()),
-        headers: {"Content-Type": "application/json"}, body: body);
-
+  Future<http.Response> updateEvents(int EventId,String releasedate) async{
+    final response = await http.put(Uri.parse(baseUrl+"/eventupdatereleseadedate/"+EventId.toString()+"/releasedate/"+releasedate));
     log.i(response.body);
     log.i(response.statusCode);
-
     return response;
 
   }

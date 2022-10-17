@@ -5,6 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fortloom/core/service/ArtistService.dart';
 import 'package:fortloom/core/service/FollowService.dart';
 import 'package:fortloom/domain/entities/ArtistResource.dart';
+import 'package:fortloom/presentation/views/artist/artistSupport.dart';
 import 'package:fortloom/presentation/widgets/sideBar/navigationBloc.dart';
 import 'package:http/src/response.dart';
 
@@ -27,15 +28,19 @@ class _ArtistState extends State<ArtistView> {
   String username="Usuario";
   PersonResource personResource= new PersonResource(0, "username", "realname", "lastname", "email", "password");
   bool post = false;
+  List<ArtistResource>artits=[];
   var nametextfield = TextEditingController();
   var descriptiontextfield = TextEditingController();
   var datetextfield = TextEditingController();
   String fechastring = "fecha";
   DateTime fechadescription = DateTime(2022,06,15);
   DateTime fechapredefinida = DateTime.now();
+  int userid=0;
+  void getdata(){
+    artistService.getallArtists().then((value){
+          this.artits=value;
 
-  Future<List<ArtistResource>> getdata(){
-    return artistService.getallArtists();
+    });
   }
 
   @override
@@ -50,6 +55,7 @@ class _ArtistState extends State<ArtistView> {
         this.authService.getperson(username).then((result) {
           setState(() {
             personResource=result;
+            this.userid=personResource.id;
           });
         });
       });
@@ -58,18 +64,58 @@ class _ArtistState extends State<ArtistView> {
   
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<ArtistResource>>(future: getdata(), builder:(context, snapshot){
-      if(snapshot.hasError) print(snapshot.error);
-      if(snapshot.hasData) {
-        print("data:${snapshot.data}");
-        return ItemList(artistList: snapshot.data, personResource: personResource);
-      } else {
-        return const Center(child: CircularProgressIndicator(),);
-      }
-      //return ItemList(artistList: snapshot.data, personResource: personResource); //esta línea es hardcoded porque se regresa si no hay data, puede generar error
-    });
+    Future<void> _pullRefresh() async {
+      artistService.getallArtists().then((value) {
+        setState(() {
+          this.artits = value;
+        });
+      });
+
+    }
+    return ScreenBase(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Column(
+            children: [
+
+              Expanded(
+                child: artits.isNotEmpty
+                    ? RefreshIndicator(
+                    child: ListView.builder(
+                        itemCount: artits.length,
+                        itemBuilder: (context, index) {
+                          return artistSupport(artistid: artits[index],userid: userid);
+                        }),
+                    onRefresh: _pullRefresh)
+                    : const Center(child: Text("No Artists")),
+              )
+            ],
+          ),
+        ));
+
   }
 }
+
+
+//const Center(child: CircularProgressIndicator()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class ItemList extends StatefulWidget {
   const ItemList({Key? key, required this.personResource, required this.artistList}) : super(key: key);
@@ -86,7 +132,7 @@ class _ItemListState extends State<ItemList> {
 
   Future<Response> createFollow(int artistId, int fanaticId) {
     FollowService followService = new FollowService();
-    var result = followService.createFollow(artistId, fanaticId);
+    var result = followService.createFollow(artistId, fanaticId,true);
     return result;
   }
 
@@ -107,10 +153,10 @@ class _ItemListState extends State<ItemList> {
               color: Colors.grey,
               child: Column(
                 children: [
-                  Container(
-                    child: Image.network(artistList![index].content!),
+                 /* Container(
+                    child: Image.network(artistList![index].content),
                     height: 200,
-                  ),
+                  ),*/
 
                   ListTile(
                     title: Center(

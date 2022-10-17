@@ -4,6 +4,7 @@ import 'package:fortloom/core/framework/globals.dart';
 import 'package:fortloom/core/service/AuthService.dart';
 import 'package:fortloom/core/service/CommentService.dart';
 import 'package:fortloom/domain/entities/CommentResource.dart';
+import 'package:fortloom/domain/entities/PublicationCommentResource.dart';
 
 class CommetsDialog extends StatefulWidget {
   const CommetsDialog({Key? key, required this.postId}) : super(key: key);
@@ -18,7 +19,7 @@ class _CommetsDialogState extends State<CommetsDialog> {
   int userId = 0;
   final TextEditingController _newCommentController = TextEditingController();
   final CommentService _commentService = CommentService();
-  List<Comment> lstComments = [];
+  List<PublicationCommentResource> lstComments = [];
 
   Future<void> _pullRefresh() async {
     _commentService.getallByPostId(widget.postId).then((result) {
@@ -45,6 +46,8 @@ class _CommetsDialogState extends State<CommetsDialog> {
           });
         });
       });
+
+
     });
 
     _commentService.getallByPostId(widget.postId).then((result) {
@@ -160,7 +163,7 @@ class _CommetsDialogState extends State<CommetsDialog> {
     );
   }
 
-  Widget CommetnWidget(Comment comment) {
+  Widget CommetnWidget(PublicationCommentResource comment) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -188,7 +191,7 @@ class _CommetsDialogState extends State<CommetsDialog> {
                 width: 10,
               ),
               Text(
-                comment.person['username'],
+                comment.userAccount.username,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,

@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:fortloom/core/service/ReportService.dart';
 import 'package:fortloom/domain/entities/ForumResource.dart';
 import 'package:fortloom/domain/entities/PersonResource.dart';
+import 'package:http/http.dart';
 
 import '../../../core/service/AuthService.dart';
 import '../../../core/service/ForumCommentService.dart';
@@ -33,7 +34,7 @@ class _ForumPageState extends State<ForumPage> {
    String username="Usuario";
    _ForumPageState(ForumResource forumResourcejj){
     PersonResource personResource= new PersonResource(0, "username", "realname", "lastname", "email", "password");
-     forumResourceo = new ForumResource(0, "forumname", "forumdescription", personResource);
+     forumResourceo = new ForumResource(0, "forumname", "forumdescription","forumrules" ,personResource);
     forumResourceo=forumResourcejj;
   }
    PersonResource personResource= new PersonResource(0, "username", "realname", "lastname", "email", "password");
@@ -96,8 +97,8 @@ class _ForumPageState extends State<ForumPage> {
 
    }
    
-   Future<int> AddReport(){
-     var result=reportService.createreport(report.text.trim(), personResource.id, forumResourceo.person.id);
+   Future<Response> AddReport(){
+     var result=reportService.createforforum( personResource.id, forumResourceo.person.id,forumResourceo.id,report.text.trim());
 
      return result;
      
@@ -313,10 +314,10 @@ class itemList extends StatelessWidget {
 
 
 
-  Future<int> AddReportincomment(int id){
+  Future<Response> AddReportincomment(int id,int idcomment){
 
     ReportService reportService=new ReportService();
-    var result=reportService.createreport(report.text.trim(), personResource.id, id);
+    var result=reportService.createforcomment( personResource.id, id,idcomment,report.text.trim());
 
     return result;
 
@@ -377,7 +378,7 @@ class itemList extends StatelessWidget {
                                           child:Text("Ok"),
                                           onPressed: (){
 
-                                            AddReportincomment(list![index].person.id);
+                                            AddReportincomment(list![index].userAccount.id,list![index].id);
 
                                             Fluttertoast.showToast(
                                                 msg: "Reporte Enviado",
@@ -415,7 +416,7 @@ class itemList extends StatelessWidget {
                       ) ,
                       Align(
                         alignment: Alignment.topLeft,
-                        child:Text(list![index].person.realname+"  "+list![index].person.lastname,
+                        child:Text(list![index].userAccount.realname+"  "+list![index].userAccount.lastname,
                           style: TextStyle(
                               fontSize: 15
                           ),
@@ -423,7 +424,7 @@ class itemList extends StatelessWidget {
                       ),
                       Align(
                         alignment: Alignment.topRight,
-                        child:Text(list![index].registerdate,
+                        child:Text(list![index].registerdate.toString(),
                           style: TextStyle(
                               fontSize: 15
                           ),

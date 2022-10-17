@@ -1,29 +1,52 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 
 class ReportService {
   var log = Logger();
+  var baseUrl = "http://192.168.43.65:8087/api/v1/reportservice";
+ Future<http.Response> createforpublication(int UserMainId,int UserReportedId,int publicationId,String description)async{
+   Map data ={
+     'description': '$description',
 
-  Future<int> createreport(
-      String reportDescription, int usermainId, int UserReported) async {
-    var usermainIdstring = usermainId.toString();
-    var userReported = UserReported.toString();
+   };
+   var body = json.encode(data);
+   final response = await http.post(Uri.parse("${baseUrl}/usersmains/${UserMainId}/usersreports/${UserReportedId}/publications/${publicationId}/complaints"),
+       headers: {"Content-Type": "application/json"}, body: body
+   );
+   log.i(response.body);
+   log.i(response.statusCode);
 
-    Map data = {
-      'reportDescription': '$reportDescription',
+   return response;
+ }
+  Future<http.Response>createforcomment(int UserMainId,int UserReportedId,int commentId,String description)async{
+    Map data ={
+      'description': '$description',
+
     };
     var body = json.encode(data);
-    final response = await http.post(
-        Uri.parse(
-            "http://192.168.0.102:8080/api/v1/usersmains/$usermainIdstring/usersreports/$userReported/reports"),
-        headers: {"Content-Type": "application/json"},
-        body: body);
+    final response = await http.post(Uri.parse("${baseUrl}/usersmains/${UserMainId}/usersreports/${UserReportedId}/comments/${commentId}/complaints"),
+        headers: {"Content-Type": "application/json"}, body: body
+    );
     log.i(response.body);
     log.i(response.statusCode);
 
-    int number = response.statusCode;
-    print(number);
-    return number;
+    return response;
   }
+  Future<http.Response>createforforum(int UserMainId,int UserReportedId,int forumId,String description)async{
+    Map data ={
+      'description': '$description',
+
+    };
+    var body = json.encode(data);
+    final response = await http.post(Uri.parse("${baseUrl}/usersmains/${UserMainId}/usersreports/${UserReportedId}/forums/${forumId}/complaints"),
+        headers: {"Content-Type": "application/json"}, body: body
+    );
+    log.i(response.body);
+    log.i(response.statusCode);
+
+    return response;
+  }
+
 }

@@ -1,22 +1,52 @@
+
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:fortloom/core/framework/globals.dart';
+import 'package:fortloom/core/service/ImagePublicationService.dart';
 import 'package:fortloom/core/service/PostService.dart';
+import 'package:fortloom/core/service/PublicationService.dart';
+import 'package:fortloom/domain/entities/ImageResource.dart';
 import 'package:fortloom/domain/entities/PostResource.dart';
+import 'package:fortloom/domain/entities/PublicationResource.dart';
 import 'package:fortloom/presentation/views/posts/widgets/comentsDialog.dart';
+import 'package:fortloom/presentation/views/posts/widgets/imagePost.dart';
 import 'package:fortloom/presentation/views/posts/widgets/reportDialog.dart';
+
+import '../../event/eventlistview.dart';
 
 class PostWidget extends StatefulWidget {
   const PostWidget({Key? key, required this.post}) : super(key: key);
-  final Post post;
+  final PublicationResource post;
 
   @override
   State<PostWidget> createState() => _PostWidgetState();
 }
 
 class _PostWidgetState extends State<PostWidget> {
-  final PostService _postService = PostService();
+  final PublicationService _postService = PublicationService();
+  final ImagePublicationService imagePublicationService=ImagePublicationService();
+  List<ImageResource> imalist = [];
+  int list=0;
+  @override
+  void initState() {
+
+    this.imagePublicationService.getImageByPublicationId(widget.post.id).then((value){
+      setState(() {
+        print("lista");
+        imalist=value;
+        print(widget.post.id);
+        list=imalist.length;
+        print(list);
+      });
+
+
+
+
+    });
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +99,7 @@ class _PostWidgetState extends State<PostWidget> {
                 context: context,
                 builder: (context) => reportDialog(
                   userReported: widget.post.artist.id,
+                  publicationid: widget.post.id,
                 ),
               );
             },
@@ -86,23 +117,27 @@ class _PostWidgetState extends State<PostWidget> {
           Container(
             margin: const EdgeInsets.symmetric(vertical: 10),
             child: Text(
-              widget.post.publicationDescription,
+              widget.post.description,
               style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               maxLines: 5,
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          Container(
-            height: 120,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Colors.grey[600],
-              image: DecorationImage(
-                  image: NetworkImage(
-                      "https://source.unsplash.com/random/200x200?sig=${DateTime.now().millisecondsSinceEpoch}"),
-                  fit: BoxFit.cover),
-            ),
-          ),
+          if(list!=0)
+            ListView.builder(
+                itemCount: list,
+                physics: ClampingScrollPhysics(),
+
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                       return imagePost(image: imalist[index]);
+                }),
+
+
+
+
+
+
           SizedBox(height: 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -110,18 +145,14 @@ class _PostWidgetState extends State<PostWidget> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    widget.post.likes++;
+                    //widget.post.likes++;
                   });
-                  _postService.uptPost(widget.post);
+                  //_postService.uptPost(widget.post);
                 },
                 child: Row(
                   children: [
-                    const Icon(Icons.thumb_up),
-                    const SizedBox(width: 5),
-                    Text(
-                      widget.post.likes.toString(),
-                      style: const TextStyle(fontSize: 14),
-                    ),
+
+                    Eventlikes( contentid: widget.post.id),
                   ],
                 ),
               ),

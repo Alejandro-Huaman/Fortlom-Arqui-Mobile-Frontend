@@ -4,8 +4,9 @@ class ForumResource{
   final int id;
   final String forumname;
   final String forumdescription;
+  final String? forumrules;
   final PersonResource person;
-  ForumResource(this.id,this.forumname,this.forumdescription,this.person);
+  ForumResource(this.id,this.forumname,this.forumdescription,this.forumrules,this.person);
 
 
 

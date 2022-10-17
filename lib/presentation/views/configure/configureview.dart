@@ -1,5 +1,9 @@
 import "package:flutter/material.dart";
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fortloom/core/service/ArtistService.dart';
+import 'package:fortloom/core/service/ImageUserService.dart';
+import 'package:fortloom/domain/entities/ImageResource.dart';
 
 import 'package:fortloom/presentation/views/configure/configure_settingsview.dart';
 import 'package:fortloom/presentation/widgets/screenBase.dart';
@@ -21,17 +25,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
   bool showPassword = true;
   ProfileService profileService=new ProfileService();
   AuthService authService= new AuthService();
+  ArtistService artistService=new ArtistService();
+  ImageUserService imageUserService=new ImageUserService();
   final TextEditingController realnameController = new TextEditingController();
   final TextEditingController lastnameController = new TextEditingController();
   final TextEditingController emailController = new TextEditingController();
   final TextEditingController newpasswordController = new TextEditingController();
-  final Uri _urlF = Uri.parse('https://www.facebook.com/?sk=welcome');
-  final Uri _urlI = Uri.parse('https://www.instagram.com');
-  final Uri _urlT = Uri.parse('https://twitter.com/i/flow/login');
+   Uri _urlF = Uri.parse('https://www.facebook.com/?sk=welcome');
+   Uri _urlI = Uri.parse('https://www.instagram.com');
+   Uri _urlT = Uri.parse('https://twitter.com/i/flow/login');
   var list = ['Rock','Jazz','Indie','Blues','Classical','Country','Dance','Electronic','Rap','Latin','Metal','Punk','Reggae','Funk','Soul','Pop','Progressive','Criolla','Fusion','Trap'];
 
   String username="Usuario";
   PersonResource personResource= new PersonResource(0, "username", "realname", "lastname", "email", "password");
+  ImageResource imageResource=new ImageResource(0, "imagenUrl", 0, "0", 0);
 
   @override
   void initState() {
@@ -50,6 +57,31 @@ class _EditProfilePageState extends State<EditProfilePage> {
           setState(() {
             personResource=result;
             newpasswordController.text=personResource.password;
+            this.imageUserService.getImageByUserId(personResource.id).then((value){
+              setState(() {
+                this.imageResource = value[0];
+              });
+            });
+            this.artistService.getArtistbyartistname(personResource.username).then((value){
+              setState(() {
+                print(value.facebookLink);
+                if(value.facebookLink!=null){
+                  this._urlF=Uri.parse(value.facebookLink.toString());
+                }
+                if(value.instagramLink!=null){
+                  this._urlI=Uri.parse(value.instagramLink.toString());
+                }
+                if(value.twitterLink!=null){
+                  this._urlT=Uri.parse(value.twitterLink.toString());
+                }
+
+
+
+              });
+
+
+
+            });
           });
 
         });
@@ -122,7 +154,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
                                         fit: BoxFit.cover,
-                                        image: NetworkImage("https://media.newyorker.com/photos/5909771c2179605b11ad8664/master/pass/Petrusich-Sinead-OConnor.jpg")
+                                        image: NetworkImage(imageResource.imagenUrl)
                                     )
                                 ),
                               ),
@@ -190,7 +222,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         buildTextField("Full Name",personResource.realname,realnameController,false),
                         buildTextField("Full Name",personResource.lastname,lastnameController,false),
                         buildTextField("E-mail", personResource.email,emailController,false),
-                        buildTextField(" New Password", "", newpasswordController, true),
+
                         SizedBox(
                           height: 35,
                         ),
@@ -207,7 +239,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 realnameController.text=personResource.realname;
                                 lastnameController.text=personResource.lastname;
                                 emailController.text=personResource.email;
-                                newpasswordController.text=personResource.password;
+                                //newpasswordController.text=personResource.password;
                               },
                               child: Text("Cancel",
                                   style: TextStyle(
@@ -226,7 +258,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 if(emailController.text==''){
                                   emailController.text=personResource.email;
                                 }
-                                profileService.editProfile(personResource.id, realnameController.text.trim(), lastnameController.text.trim(), emailController.text.trim(), newpasswordController.text.trim());
+                                profileService.editProfile(personResource.id, realnameController.text.trim(), lastnameController.text.trim(), emailController.text.trim());
                               },
                               style:
                               ElevatedButton.styleFrom(
@@ -244,7 +276,61 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               ),
                             )
                           ],
-                        )
+                        ),
+                        buildTextField(" New Password", "", newpasswordController, true),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                  padding: EdgeInsets.symmetric(horizontal: 50),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20))
+                              ),
+                              onPressed: (){
+
+                                newpasswordController.text=personResource.password;
+                              },
+                              child: Text("Cancel",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      letterSpacing: 2.2,
+                                      color: Colors.black)),
+                            ),
+                            ElevatedButton(
+                              onPressed: (){
+                                if(newpasswordController.text==''||newpasswordController.text==personResource.password){
+                                  Fluttertoast.showToast(
+                                      msg: "Ingresepalabra",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0
+
+                                  );
+                                }
+                                else{
+                                  profileService.editPassword(personResource.id,  newpasswordController.text.trim());
+                                }
+
+                              },
+                              style:
+                              ElevatedButton.styleFrom(
+                                primary: Colors.black,
+                                padding: EdgeInsets.symmetric(horizontal: 50),
+                                elevation: 2,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                              ),
+                              child: Text(
+                                "Save",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    letterSpacing: 2.2,
+                                    color: Colors.white),
+                              ),
+                            )
+                          ],
+                        ),
                       ],
                     ),
                   ),
