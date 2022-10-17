@@ -43,6 +43,7 @@ dependencies:
   font_awesome_flutter: ^10.1.0
   intl: ^0.17.0
   url_launcher: ^6.1.4
+  dialog_flowtter: ^0.3.3
 
 
 
@@ -63,6 +64,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/imgs/
+    - assets/dialog_flow_auth.json
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see
