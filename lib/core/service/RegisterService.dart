@@ -20,7 +20,7 @@ class RegisterService {
     };
     var body = json.encode(data);
     final response = await http.post(
-        Uri.parse("http://192.168.0.201:8081/auth/fanatic"),
+        Uri.parse("https://fortlom-account.herokuapp.com/auth/fanatic"),
         headers: {"Content-Type": "application/json"},
         body: body);
     log.i(response.body);
@@ -46,7 +46,7 @@ class RegisterService {
     };
     var body = json.encode(data);
     final response = await http.post(
-        Uri.parse("http://192.168.0.201:8081/auth/artist"),
+        Uri.parse("https://fortlom-account.herokuapp.com/auth/artist"),
         headers: {"Content-Type": "application/json"},
         body: body);
     log.i(response.body);

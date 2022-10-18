@@ -26,6 +26,7 @@ class _EventState extends State<EventMainView> {
   String username="Usuario";
   PersonResource personResource= new PersonResource(0, "username", "realname", "lastname", "email", "password");
   bool post = false;
+  bool isupdagrade=false;
   var nametextfield = TextEditingController();
   var descriptiontextfield = TextEditingController();
   var datetextfield = TextEditingController();
@@ -42,7 +43,9 @@ class _EventState extends State<EventMainView> {
               child:Column(
                   children: <Widget>[
                     SizedBox(height: 10,),
-                    CardMainEvent(),
+                    if(isupdagrade)...[
+                      CardMainEvent(),
+                    ],
                     SizedBox(height: 10,),
                     ShowForm(),
                     SizedBox(height: 10,),
@@ -74,6 +77,9 @@ class _EventState extends State<EventMainView> {
           });
 
         });
+        isupdagrade=this.authService.isartistupgrade(tep);
+
+
       });
     }) ;
   }

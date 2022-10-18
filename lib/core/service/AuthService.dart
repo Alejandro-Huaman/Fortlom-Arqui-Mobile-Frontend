@@ -40,7 +40,7 @@ class AuthService {
 
   Future<PersonResource> getperson(String getUsername) async {
     final response = await http.get(Uri.parse(
-        "http://192.168.0.201:8081/api/v1/userservice/users/users/Username/" + getUsername));
+        "https://fortlom-account.herokuapp.com/api/v1/userservice/users/users/Username/" + getUsername));
 
 
 
@@ -87,6 +87,36 @@ class AuthService {
       return false;
     }
     print("fanatico");
+    return true;
+
+  }
+  bool isartist(String token){
+    final parts = token.split(".");
+    final payload = parts[1];
+    String payloadDecoded = base64Url.normalize(payload);
+    String prevalues = utf8.decode(base64Url.decode(payloadDecoded));
+    final values = jsonDecode(prevalues);
+    List<dynamic> roles = values["roles"];
+    if (roles.indexOf('Role_Artist') < 0) {
+      //print("artista");
+      return false;
+    }
+    print("artista");
+    return true;
+
+  }
+  bool isartistupgrade(String token){
+    final parts = token.split(".");
+    final payload = parts[1];
+    String payloadDecoded = base64Url.normalize(payload);
+    String prevalues = utf8.decode(base64Url.decode(payloadDecoded));
+    final values = jsonDecode(prevalues);
+    List<dynamic> roles = values["roles"];
+    if (roles.indexOf('Role_Upgrade_Artist') < 0) {
+      //print("artista");
+      return false;
+    }
+    print("artista");
     return true;
 
   }

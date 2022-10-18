@@ -7,7 +7,7 @@ import 'dart:convert';
 
 class EventService{
 
-  var baseUrl = "http://192.168.0.201:8082/api/v1/contentservice";
+  var baseUrl = "https://fortlom-content.herokuapp.com/api/v1/contentservice";
   var log = Logger();
 
   Future<List<EventResource>> getallEvents() async{

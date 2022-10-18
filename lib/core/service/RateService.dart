@@ -9,7 +9,7 @@ import 'package:logger/logger.dart';
 import 'dart:convert';
 class RateService{
   var log=Logger();
-  var baseUrl = "http://192.168.0.201:8085/api/v1/supportservice";
+  var baseUrl = "https://fortlom-support.herokuapp.com/api/v1/supportservice";
 
 
 

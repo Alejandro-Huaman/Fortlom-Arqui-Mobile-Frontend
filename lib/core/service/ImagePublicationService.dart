@@ -8,7 +8,7 @@ import 'package:logger/logger.dart';
 import 'dart:convert';
 class ImagePublicationService{
   var log = Logger();
-  var baseUrl = "http://192.168.0.201:8086/api/v1/multimediaservice";
+  var baseUrl = "https://fortlom-multimedia.herokuapp.com/api/v1/multimediaservice";
 
   Future<http.Response> createimageforpublication(int publicationsId,File file) async{
 

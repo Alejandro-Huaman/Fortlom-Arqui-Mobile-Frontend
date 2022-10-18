@@ -38,7 +38,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   String username="Usuario";
   PersonResource personResource= new PersonResource(0, "username", "realname", "lastname", "email", "password");
-  ImageResource imageResource=new ImageResource(0, "imagenUrl", 0, "0", 0);
+  ImageResource imageResource=new ImageResource(0, "https://cdn.discordapp.com/attachments/1008578583251406990/1031677299101286451/unknown.png", 0, "0", 0);
 
   @override
   void initState() {

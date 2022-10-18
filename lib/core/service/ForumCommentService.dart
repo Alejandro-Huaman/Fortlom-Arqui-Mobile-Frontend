@@ -15,7 +15,7 @@ String currentDate() {
 }
 class ForumCommentService{
 
-var baseUrl="http://192.168.0.201:8084/api/v1/answerservice";
+var baseUrl="https://fortlom-answer.herokuapp.com/api/v1/answerservice";
 var log=Logger();
 
 Future<List<ForumCommentResource>> getbyForumID(int id) async
