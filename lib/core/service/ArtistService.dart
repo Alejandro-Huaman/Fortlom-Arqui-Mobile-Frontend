@@ -73,7 +73,7 @@ class ArtistService {
         jsonData["facebookLink"], jsonData["twitterLink"]);
     return artistResource;
   }
-  Future<http.Response> createTag(String name,Long artistId) async {
+  Future<http.Response> createTag(String name,int artistId) async {
     Map data={
 
       'name':'$name'
