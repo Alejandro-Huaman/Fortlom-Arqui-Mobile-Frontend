@@ -89,8 +89,8 @@ class _reportDialogState extends State<reportDialog> {
                 ),
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
-                  child: RaisedButton(
-                    color: Colors.redAccent.withOpacity(0.8),
+                  child: FloatingActionButton(
+                    backgroundColor: Colors.redAccent.withOpacity(0.8),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
