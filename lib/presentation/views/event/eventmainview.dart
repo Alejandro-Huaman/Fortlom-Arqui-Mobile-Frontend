@@ -99,7 +99,7 @@ class _EventState extends State<EventMainView> {
                   height: 100,
               ),
               SizedBox(height: 5,),
-              RaisedButton(
+              FloatingActionButton(
                   onPressed: (){
                     setState(() {
                       post = true;
@@ -107,7 +107,7 @@ class _EventState extends State<EventMainView> {
                     print(post);
                   },
                   child: Text("Post Event"),
-                  color: Colors.white,
+                  backgroundColor: Colors.white,
               )
             ],
           )
