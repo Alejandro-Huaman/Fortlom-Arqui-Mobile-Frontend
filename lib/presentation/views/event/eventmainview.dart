@@ -161,7 +161,7 @@ class _EventState extends State<EventMainView> {
                 Row(
                   children: <Widget>[
                     SizedBox(width: 10,),
-                    RaisedButton(
+                    FloatingActionButton(
                         onPressed: (){
                           setState(() {
                             post = false;
@@ -169,20 +169,20 @@ class _EventState extends State<EventMainView> {
                           print(post);
                         },
                         child:Text("Cancel"),
-                        color:Colors.white
+                        backgroundColor:Colors.white
                     ),
                     SizedBox(width: 10,),
-                    RaisedButton(
+                    FloatingActionButton(
                         onPressed: (){
                           nametextfield.text = '';
                           descriptiontextfield.text = '';
                           datetextfield.text = '';
                         },
                         child:Text("Clean"),
-                        color:Colors.white
+                        backgroundColor:Colors.white
                     ),
                     SizedBox(width: 10,),
-                    RaisedButton(
+                    FloatingActionButton(
                         onPressed: (){
                           print("Fecha a utilizar: $fechadescription");
                           String fechaevento = DateFormat('yyyy-MM-ddTHH:mm:ss').format(fechadescription); //parse me ayuda para convertir un string a Datetime y format de datetime a string
@@ -190,7 +190,7 @@ class _EventState extends State<EventMainView> {
                           eventService.addEvents(nametextfield.text.trim(), descriptiontextfield.text.trim(), "link", fechaevento, personResource.id);
                         },
                         child:Text("Create and Post"),
-                        color:Colors.white
+                        backgroundColor:Colors.white
                     )
                   ],
                 )
@@ -202,7 +202,7 @@ class _EventState extends State<EventMainView> {
 
   Widget ShowButtons(){
     return Center(
-          child: RaisedButton(
+          child: FloatingActionButton(
               onPressed: (){
                 Navigator.push(
                   context,
@@ -210,7 +210,7 @@ class _EventState extends State<EventMainView> {
                 );
               },
               child: Text("Show All Events"),
-              color:Colors.white
+              backgroundColor:Colors.white
           ),
         );
   }
