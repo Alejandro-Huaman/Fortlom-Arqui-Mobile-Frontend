@@ -1,5 +1,7 @@
 import 'package:dialog_flowtter/dialog_flowtter.dart';
 import 'package:flutter/material.dart';
+import 'package:fortloom/domain/entities/ArtistResource.dart';
+import 'package:fortloom/domain/entities/PublicationResource.dart';
 
 import 'Messages.dart';
 
@@ -13,8 +15,9 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
   late DialogFlowtter dialogFlowtter;
   final TextEditingController _controller = TextEditingController();
-
   List<Map<String,dynamic>> messages = [];
+  ArtistResource objartist = ArtistResource(0, "username", "realname", lastname, email, password, artistfollowers, instagramLink, facebookLink, twitterLink)
+  PublicationResource objpublication = PublicationResource(0, "description", false,, artistid, artist)
 
   @override
   void initState() {
@@ -80,6 +83,17 @@ class _ChatState extends State<Chat> {
       if(response.message == null) return;
       setState(() {
         addMessages(response.message!);
+        //Para crear publicaciones
+        if(response.message == "Este será la descripción de tu publicación, seguro de esta respuesta?"){
+          print(text);
+          print(response.message);
+          widget.objectpublication
+        }
+
+        //Para crear eventos
+        if(response.message == "Este será la descripción de tu evento, seguro de esta respuesta?"){
+
+        }
       });
     }
   }
