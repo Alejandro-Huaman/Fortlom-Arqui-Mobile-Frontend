@@ -8,6 +8,7 @@ import 'package:fortloom/core/service/ReportService.dart';
 import 'package:fortloom/domain/entities/ForumResource.dart';
 import 'package:fortloom/domain/entities/PersonResource.dart';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/service/AuthService.dart';
 import '../../../core/service/ForumCommentService.dart';
@@ -228,7 +229,7 @@ class _ForumPageState extends State<ForumPage> {
                     return itemList(list: snapshot.data,report: this.report,personResource: this.personResource,);
 
                   }
-                  return Text("Correct");
+                  return Text("No Comments Available");
 
                 },
               ),
@@ -424,7 +425,8 @@ class itemList extends StatelessWidget {
                       ),
                       Align(
                         alignment: Alignment.topRight,
-                        child:Text(list![index].registerdate.toString(),
+                        child:Text(
+                            DateFormat('yyyy-MM-dd').format(list![index].registerdate as DateTime),
                           style: TextStyle(
                               fontSize: 15
                           ),

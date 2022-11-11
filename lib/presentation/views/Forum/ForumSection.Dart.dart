@@ -67,23 +67,38 @@ class _ForumSectionState extends State<ForumSection> {
              child:  Column (
                children: <Widget>[
 
-                 Padding(padding: const EdgeInsets.only(left: 350),
-                   child:Ink(
-                     decoration: const ShapeDecoration(
-                       color: Colors.blueGrey,
-                       shape: CircleBorder(),
-                     ),
 
-                     child: IconButton(
-
-                       icon: const Icon(Icons.add),
-                       color: Colors.black,
-                       onPressed: () => navigatetoForumCreate(context),
-
-                     ),
-
+               Center(
+                 child: Text(
+                   'Forums',
+                   style: TextStyle(
+                     fontFamily: 'Roboto',
+                     fontSize: 36,
                    ),
+
                  ),
+               ),
+                 SizedBox(height: 30),
+                Container(
+                  width: 400,
+                  height: 100,
+                  child: TextButton(onPressed: () => navigatetoForumCreate(context),
+                    child: Text("Create Forum",
+                      style: TextStyle(
+                          color: Colors.black54
+                      ),
+                    ),
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.cyan,
+                      padding: const EdgeInsets.all(16.0),
+                    ),
+
+                  ),
+                ),
+
+
+
+                 SizedBox(height: 30),
                  FutureBuilder<List<ForumResource>>(
                    future: getdata(),
                    builder: (context, snapshot) {
@@ -94,10 +109,11 @@ class _ForumSectionState extends State<ForumSection> {
                        return ItemList(list: snapshot.data!);
 
                      }
-                     return Text("Correct");
+                     return Text("No Forums Available");
 
                    },
                  ),
+                 SizedBox(height: 30),
 
 
 
@@ -148,48 +164,50 @@ class ItemList extends StatelessWidget {
         shrinkWrap: true,
         itemCount: list == null ? 0 : list?.length,
         itemBuilder: (context,index){
-          return Container(
+          return SizedBox(
               height: 150,
-              width: 300,
-              child: Card(
-              child: Column(
-                  children: <Widget>[
-                    Align(alignment: Alignment.topRight,
-                      child: SizedBox(
-                        height: 18,
-                        width: 20,
-                        child: FloatingActionButton(
-                          heroTag: 'tagImage$index',
-                            shape: RoundedRectangleBorder(),
-                            child: Icon(Icons.arrow_forward_ios,
-                              size: 18,
+              width: 500,
+              //padding: const EdgeInsets.all(10.0),
+              child: InkWell(onTap: () => navigatetoForumPage(context,list![index]),
+
+                  child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(80),
+
+                      ),
+                      color: Colors.white30,
+                      child: Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.campaign,
+                              color: Colors.yellowAccent,
+                              size: 50.0,
+
+
                             ),
 
-                          onPressed: () => navigatetoForumPage(context,list![index]),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: new EdgeInsets.all(10.0),
 
 
-                      child: Text(
-                          list![index].forumname, style: TextStyle(fontSize: 20)),
-
-                    ),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Text(list![index].person.realname + "    " +
-                          list![index].person.lastname,
-                        style: TextStyle(fontSize: 10),
+                            Padding(
+                              padding: new EdgeInsets.all(50.0),
 
 
-                      ),
-                    )
+                              child:Center(
+                                child: Text(
+                                    list![index].forumname, style: TextStyle(fontSize: 20)),
 
-                  ]
-              )
-              )
+                              ),
+                              ),
+
+
+
+
+                          ]
+                      )
+                  )
+
+              ),
+
           );
         });
   }

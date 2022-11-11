@@ -12,8 +12,8 @@ class imagePost extends StatefulWidget {
 class _imagePostState extends State<imagePost> {
   @override
   Widget build(BuildContext context) {
-    return
-
+    return Column(
+      children: [
       Container(
       height: 400,
       decoration: BoxDecoration(
@@ -25,6 +25,11 @@ class _imagePostState extends State<imagePost> {
                 widget.image.imagenUrl),
             fit: BoxFit.cover),
       ),
+    ),
+      SizedBox(height: 20),
+      ],
     );
+
+
   }
 }

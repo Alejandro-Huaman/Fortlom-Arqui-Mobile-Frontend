@@ -62,7 +62,7 @@ class PublicationService{
     return lstPosts;
 
   }
-  Future<http.Response> addPost(
+  Future<int> addPost(
       String description, int artistId,String type) async {
     Map data = {
 
@@ -76,7 +76,10 @@ class PublicationService{
         body: body);
     log.i(response.body);
     log.i(response.statusCode);
-    return response;
+    String boydpage = utf8.decode(response.bodyBytes);
+    final jsonData = jsonDecode(boydpage);
+     print(jsonData["id"]);
+    return jsonData["id"];
 
 
   }

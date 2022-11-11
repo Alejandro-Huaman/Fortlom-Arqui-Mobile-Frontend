@@ -89,17 +89,19 @@ class _EventState extends State<EventMainView> {
       child:Container(
           padding: EdgeInsets.all(10),
           width: 200,
-          height: 200,
+          height: 300,
           child:Column(
             children:<Widget> [
               Text('Make a Event!'),
               SizedBox(height: 10,),
               Image(
-                  image: AssetImage('assets/imgs/events_image.jpg'),
-                  height: 100,
+                image: AssetImage('assets/imgs/events_image.jpg'),
+                height: 100,
               ),
               SizedBox(height: 5,),
-              FloatingActionButton(
+              Container(
+                color: Colors.greenAccent,
+                child: TextButton(
                   onPressed: (){
                     setState(() {
                       post = true;
@@ -107,8 +109,10 @@ class _EventState extends State<EventMainView> {
                     print(post);
                   },
                   child: Text("Post Event"),
-                  backgroundColor: Colors.white,
+                  style: TextButton.styleFrom(backgroundColor: Colors.white),
+                ),
               )
+
             ],
           )
       )
@@ -161,7 +165,7 @@ class _EventState extends State<EventMainView> {
                 Row(
                   children: <Widget>[
                     SizedBox(width: 10,),
-                    FloatingActionButton(
+                    FlatButton(
                         onPressed: (){
                           setState(() {
                             post = false;
@@ -169,20 +173,20 @@ class _EventState extends State<EventMainView> {
                           print(post);
                         },
                         child:Text("Cancel"),
-                        backgroundColor:Colors.white
+                        color:Colors.red
                     ),
                     SizedBox(width: 10,),
-                    FloatingActionButton(
+                    FlatButton(
                         onPressed: (){
                           nametextfield.text = '';
                           descriptiontextfield.text = '';
                           datetextfield.text = '';
                         },
                         child:Text("Clean"),
-                        backgroundColor:Colors.white
+                        color:Colors.deepOrangeAccent
                     ),
                     SizedBox(width: 10,),
-                    FloatingActionButton(
+                    FlatButton(
                         onPressed: (){
                           print("Fecha a utilizar: $fechadescription");
                           String fechaevento = DateFormat('yyyy-MM-ddTHH:mm:ss').format(fechadescription); //parse me ayuda para convertir un string a Datetime y format de datetime a string
@@ -190,7 +194,7 @@ class _EventState extends State<EventMainView> {
                           eventService.addEvents(nametextfield.text.trim(), descriptiontextfield.text.trim(), "link", fechaevento, personResource.id);
                         },
                         child:Text("Create and Post"),
-                        backgroundColor:Colors.white
+                        color:Colors.blueAccent
                     )
                   ],
                 )
@@ -202,16 +206,22 @@ class _EventState extends State<EventMainView> {
 
   Widget ShowButtons(){
     return Center(
-          child: FloatingActionButton(
+
+          child: Container(
+            color: Colors.red,
+            child: TextButton(
               onPressed: (){
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => EventListView())
+                    context,
+                    MaterialPageRoute(builder: (context) => EventListView())
                 );
               },
+              style: TextButton.styleFrom(backgroundColor: Colors.white),
               child: Text("Show All Events"),
-              backgroundColor:Colors.white
-          ),
+              //colo:Colors.black54
+            ),
+          )
+
         );
   }
 
@@ -221,7 +231,7 @@ class _EventState extends State<EventMainView> {
     }else{
       return Icon(
           Icons.cancel,
-          color: Colors.white
+          color: Colors.black54
       );
     }
   }
