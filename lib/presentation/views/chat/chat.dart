@@ -115,7 +115,7 @@ class _ChatState extends State<Chat> {
         addMessages(response.message!);
 
         //Para crear publicaciones
-        if(obtainresponse!.text!.text!.first == "Este será la descripción de tu publicación, seguro de esta respuesta?"){
+        if(obtainresponse!.text!.text!.first == "Se creo la publicación correctamente :D"){
           print(text);
           print(obtainresponse!.text!.text!.first);
           mayus = auxlinks.length > 0;
@@ -135,7 +135,7 @@ class _ChatState extends State<Chat> {
         }
 
         //Para crear eventos
-        if(obtainresponse!.text!.text!.first == "Este será la descripción de tu evento, seguro de esta respuesta?"){
+        if(obtainresponse!.text!.text!.first == "Se creo el evento correctamente :D"){
           print(text);
           print(obtainresponse!.text!.text!.first);
 
