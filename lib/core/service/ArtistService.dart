@@ -181,7 +181,15 @@ class ArtistService {
 
   }
 
+  Future<bool> existartistId(int artistId) async{
+    final response = await http.get(Uri.parse(baseUrl+"/check/"+artistId.toString()));
+    log.i(response.body);
+    log.i(response.statusCode);
+    String body = utf8.decode(response.bodyBytes);
 
+    return body == "true" ? true:false;
+
+  }
 
 
   Future<http.Response> updateArtist(int artistfollowers,int artistId) async{

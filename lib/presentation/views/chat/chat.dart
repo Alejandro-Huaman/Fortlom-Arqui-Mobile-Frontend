@@ -119,27 +119,52 @@ class _ChatState extends State<Chat> {
           print(text);
           print(obtainresponse!.text!.text!.first);
           mayus = auxlinks.length > 0;
-          publicationService.addPost(text, userId, mayus.toString());
+          artistService.existartistId(userId).then((resartist){
+            if(resartist == true){
+              publicationService.addPost(text, userId, mayus.toString());
+            }else{
+              Fluttertoast.showToast(
+                  msg: "No es un artista por tal motivo no puede crear publicaciones!",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 7,
+                  fontSize: 16.0
+              );
+            }
+          });
         }
 
         //Para crear eventos
         if(obtainresponse!.text!.text!.first == "Este será la descripción de tu evento, seguro de esta respuesta?"){
           print(text);
           print(obtainresponse!.text!.text!.first);
-          artistService.checkremiumartistid(userId).then((response){
-            ispremium = response;
 
-            print(ispremium);
+          artistService.existartistId(userId).then((resartist){
+            if(resartist == true){
+                artistService.checkremiumartistid(userId).then((response){
+                  ispremium = response;
 
-            if(ispremium == true){
-              contevent+=1;
-              eventService.addEvents("Event "+contevent.toString(),text,"https://teleticket.com.pe/","",userId);
+                  print(ispremium);
+
+                  if(ispremium == true){
+                    contevent+=1;
+                    eventService.addEvents("Event "+contevent.toString(),text,"https://teleticket.com.pe/","",userId);
+                  }else{
+                    Fluttertoast.showToast(
+                        msg: "No es artista premium, por favor mejorar su cuenta a premium para crear un evento!",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 7,
+                        fontSize: 16.0
+                    );
+                  }
+                });
             }else{
               Fluttertoast.showToast(
-                  msg: "No es artista premium, por favor mejorar su cuenta a premium para crear un evento!",
+                  msg: "No es un artista por tal motivo no puede crear eventos!",
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.CENTER,
-                  timeInSecForIosWeb: 3,
+                  timeInSecForIosWeb: 7,
                   fontSize: 16.0
               );
             }
