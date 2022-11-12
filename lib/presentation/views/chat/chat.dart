@@ -1,8 +1,13 @@
 import 'package:dialog_flowtter/dialog_flowtter.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:fortloom/core/service/ArtistService.dart';
+import 'package:fortloom/core/service/AuthService.dart';
+import 'package:fortloom/core/service/EventService.dart';
 import 'package:fortloom/domain/entities/ArtistResource.dart';
 import 'package:fortloom/domain/entities/PublicationResource.dart';
 
+import '../../../core/service/PublicationService.dart';
 import 'Messages.dart';
 
 class Chat extends StatefulWidget {
@@ -16,13 +21,35 @@ class _ChatState extends State<Chat> {
   late DialogFlowtter dialogFlowtter;
   final TextEditingController _controller = TextEditingController();
   List<Map<String,dynamic>> messages = [];
-  ArtistResource objartist = ArtistResource(0, "username", "realname", lastname, email, password, artistfollowers, instagramLink, facebookLink, twitterLink)
-  PublicationResource objpublication = PublicationResource(0, "description", false,, artistid, artist)
-
+  final PublicationService publicationService = PublicationService();
+  final ArtistService artistService = ArtistService();
+  final AuthService authService = AuthService();
+  final EventService eventService = EventService();
+  var auxlinks = [];
+  Message? obtainresponse = Message();
+  var mayus;
+  int userId=0;
+  int contevent = 0;
+  String username = "Usuario";
+  bool ispremium = false;
   @override
   void initState() {
     DialogFlowtter.fromFile().then((instance) => dialogFlowtter = instance);
     super.initState();
+
+    String tep;
+    this.authService.getToken().then((result) {
+      setState(() {
+        tep = result.toString();
+        username = this.authService.GetUsername(tep);
+
+        this.authService.getperson(username).then((result) {
+          setState(() {
+            userId = result.id;
+          });
+        });
+      });
+    });
   }
 
   @override
@@ -81,18 +108,42 @@ class _ChatState extends State<Chat> {
           queryInput: QueryInput(text: TextInput(text: text))
       );
       if(response.message == null) return;
+      obtainresponse = response.message;
       setState(() {
+        print(text);
+        print(obtainresponse!.text!.text!.first);
         addMessages(response.message!);
+
         //Para crear publicaciones
-        if(response.message == "Este será la descripción de tu publicación, seguro de esta respuesta?"){
+        if(obtainresponse!.text!.text!.first == "Este será la descripción de tu publicación, seguro de esta respuesta?"){
           print(text);
-          print(response.message);
-          widget.objectpublication
+          print(obtainresponse!.text!.text!.first);
+          mayus = auxlinks.length > 0;
+          publicationService.addPost(text, userId, mayus.toString());
         }
 
         //Para crear eventos
-        if(response.message == "Este será la descripción de tu evento, seguro de esta respuesta?"){
+        if(obtainresponse!.text!.text!.first == "Este será la descripción de tu evento, seguro de esta respuesta?"){
+          print(text);
+          print(obtainresponse!.text!.text!.first);
+          artistService.checkremiumartistid(userId).then((response){
+            ispremium = response;
 
+            print(ispremium);
+
+            if(ispremium == true){
+              contevent+=1;
+              eventService.addEvents("Event "+contevent.toString(),text,"https://teleticket.com.pe/","",userId);
+            }else{
+              Fluttertoast.showToast(
+                  msg: "No es artista premium, por favor mejorar su cuenta a premium para crear un evento!",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 3,
+                  fontSize: 16.0
+              );
+            }
+          });
         }
       });
     }

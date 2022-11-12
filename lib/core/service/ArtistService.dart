@@ -168,14 +168,15 @@ class ArtistService {
 
   }
 
-  Future<http.Response> checkremiumartistid(int artistId) async{
+  Future<bool> checkremiumartistid(int artistId) async{
 
 
     final response = await http.get(Uri.parse(baseUrl+"/checkpremium/"+artistId.toString()));
     log.i(response.body);
     log.i(response.statusCode);
-    return response;
+    String body = utf8.decode(response.bodyBytes);
 
+    return body == "true" ? true:false;
 
 
   }
