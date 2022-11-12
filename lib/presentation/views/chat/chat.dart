@@ -110,9 +110,15 @@ class _ChatState extends State<Chat> {
       if(response.message == null) return;
       obtainresponse = response.message;
       setState(() {
+
+        if(obtainresponse!.text!.text!.first == "Se creo la publicación correctamente :D" || obtainresponse!.text!.text!.first == "Se creo el evento correctamente :D"){
+
+        }else{
+          addMessages(response.message!);
+        }
+
         print(text);
         print(obtainresponse!.text!.text!.first);
-        addMessages(response.message!);
 
         //Para crear publicaciones
         if(obtainresponse!.text!.text!.first == "Se creo la publicación correctamente :D"){
@@ -122,7 +128,13 @@ class _ChatState extends State<Chat> {
           artistService.existartistId(userId).then((resartist){
             if(resartist == true){
               publicationService.addPost(text, userId, mayus.toString());
+              setState(() {
+                addMessages(response.message!);
+              });
             }else{
+              setState(() {
+                addMessages(Message(text: DialogText(text: ["No se creo correctamente! :c"])));
+              });
               Fluttertoast.showToast(
                   msg: "No es un artista por tal motivo no puede crear publicaciones!",
                   toastLength: Toast.LENGTH_SHORT,
@@ -141,15 +153,21 @@ class _ChatState extends State<Chat> {
 
           artistService.existartistId(userId).then((resartist){
             if(resartist == true){
-                artistService.checkremiumartistid(userId).then((response){
-                  ispremium = response;
+                artistService.checkremiumartistid(userId).then((responsepremium){
+                  ispremium = responsepremium;
 
                   print(ispremium);
 
                   if(ispremium == true){
                     contevent+=1;
                     eventService.addEvents("Event "+contevent.toString(),text,"https://teleticket.com.pe/","",userId);
+                    setState(() {
+                      addMessages(response.message!);
+                    });
                   }else{
+                    setState(() {
+                      addMessages(Message(text: DialogText(text: ["No se creo correctamente! :c"])));
+                    });
                     Fluttertoast.showToast(
                         msg: "No es artista premium, por favor mejorar su cuenta a premium para crear un evento!",
                         toastLength: Toast.LENGTH_SHORT,
@@ -160,6 +178,9 @@ class _ChatState extends State<Chat> {
                   }
                 });
             }else{
+              setState(() {
+                addMessages(Message(text: DialogText(text: ["No se creo correctamente! :c"])));
+              });
               Fluttertoast.showToast(
                   msg: "No es un artista por tal motivo no puede crear eventos!",
                   toastLength: Toast.LENGTH_SHORT,
