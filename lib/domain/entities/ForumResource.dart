@@ -2,7 +2,7 @@ import 'PersonResource.dart';
 
 class ForumResource{
   final int id;
-  final String forumname;
+  String forumname;
   final String forumdescription;
   final String? forumrules;
   final PersonResource person;

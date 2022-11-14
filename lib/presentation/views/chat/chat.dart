@@ -4,9 +4,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:fortloom/core/service/ArtistService.dart';
 import 'package:fortloom/core/service/AuthService.dart';
 import 'package:fortloom/core/service/EventService.dart';
+import 'package:fortloom/core/service/ForumService.dart';
 import 'package:fortloom/domain/entities/ArtistResource.dart';
+import 'package:fortloom/domain/entities/EventResource.dart';
+import 'package:fortloom/domain/entities/ForumResource.dart';
+import 'package:fortloom/domain/entities/PersonResource.dart';
 import 'package:fortloom/domain/entities/PublicationResource.dart';
 
+import '../../../core/service/FanaticService.dart';
 import '../../../core/service/PublicationService.dart';
 import 'Messages.dart';
 
@@ -25,6 +30,11 @@ class _ChatState extends State<Chat> {
   final ArtistService artistService = ArtistService();
   final AuthService authService = AuthService();
   final EventService eventService = EventService();
+  final FanaticService fanaticService = FanaticService();
+  EventResource eventResource = EventResource(0, "name", "description", DateTime.now(),
+      new ArtistResource(0, "username", "realname", "lastname", "email@gmail.com", "password", 0, null, null, null) , 0, "ticketLink", DateTime.now());
+  ForumResource forumResource = ForumResource(0, "forumname", "forumdescription", "forumrules",new PersonResource(0, "username", "realname", "lastname", "email@gmail.com", "password"));
+  final ForumService forumService = ForumService();
   var auxlinks = [];
   Message? obtainresponse = Message();
   var mayus;
@@ -111,9 +121,124 @@ class _ChatState extends State<Chat> {
       obtainresponse = response.message;
       setState(() {
 
-        if(obtainresponse!.text!.text!.first == "Se creo la publicación correctamente :D" || obtainresponse!.text!.text!.first == "Se creo el evento correctamente :D"){
+        if(obtainresponse!.text!.text!.first == "Se creo la publicación correctamente :D" || obtainresponse!.text!.text!.first == "Se creo el evento correctamente :D" || obtainresponse!.text!.text!.first == "Se creo el foro correctamente :D"){
 
-        }else{
+        }else if(obtainresponse!.text!.text!.first == "Muy bien, que tipo de usuario es?"){
+          artistService.existartistId(userId).then((resartist){
+            if(resartist == true){
+              artistService.checkremiumartistid(userId).then((respremium){
+                if(respremium == true){
+                  setState(() {
+                    addMessages(Message(text: DialogText(text: ["Es un artista con plan premium por lo cual puede crear publicaciones y eventos"])));
+                  });
+                }else{
+                  setState(() {
+                    addMessages(Message(text: DialogText(text: ["Es un artista con plan free o normal por lo cual puede crear solo publicaciones"])));
+                  });
+                }
+              });
+            }else{
+              setState(() {
+                addMessages(Message(text: DialogText(text: ["Es un fanatico por lo cual no puede crear contenido mil disculpas :c"])));
+              });
+            }
+          });
+        }else if(obtainresponse!.text!.text!.first == "Perfecto! deseas crear un evento por favor coloque el nombre del evento a crear"){
+          artistService.existartistId(userId).then((resartist){
+            if(resartist == true){
+              artistService.checkremiumartistid(userId).then((respremium){
+                if(respremium == true){
+                  setState(() {
+                    addMessages(response.message!);
+                  });
+                }else{
+                  setState(() {
+                    addMessages(Message(text: DialogText(text: ["Es un artista con plan free o normal por lo cual puede crear solo publicaciones"])));
+                  });
+                }
+              });
+            }else{
+              setState(() {
+                addMessages(Message(text: DialogText(text: ["Es un fanatico por lo cual no puede crear contenido mil disculpas :c"])));
+              });
+            }
+          });
+        }else if(obtainresponse!.text!.text!.first == "Genial! ahora coloque la descripción que desea para su nuevo evento"){
+          artistService.existartistId(userId).then((resartist){
+            if(resartist == true){
+              artistService.checkremiumartistid(userId).then((respremium){
+                if(respremium == true){
+                  setState(() {
+                    addMessages(response.message!);
+                  });
+                }else{
+                  setState(() {
+                    addMessages(Message(text: DialogText(text: ["Es un artista con plan free o normal por lo cual puede crear solo publicaciones"])));
+                  });
+                }
+              });
+            }else{
+              setState(() {
+                addMessages(Message(text: DialogText(text: ["Es un fanatico por lo cual no puede crear contenido mil disculpas :c"])));
+              });
+            }
+          });
+        }else if(obtainresponse!.text!.text!.first == "Perfecto! deseas crear una publicación por favor coloque la descripción que desea colocar"){
+          artistService.existartistId(userId).then((resartist){
+            if(resartist == true){
+              setState(() {
+                addMessages(response.message!);
+              });
+            }else{
+              setState(() {
+                addMessages(Message(text: DialogText(text: ["Es un fanatico por lo cual no puede crear contenido mil disculpas :c"])));
+              });
+            }
+          });
+        }else if(obtainresponse!.text!.text!.first == "Usted es el siguiente tipo de usuario"){
+          artistService.existartistId(userId).then((resartist){
+            if(resartist == true){
+              artistService.checkremiumartistid(userId).then((respremium){
+                if(respremium == true){
+                  setState(() {
+                    addMessages(Message(text: DialogText(text: ["Es un artista con plan premium"])));
+                  });
+                }else{
+                  setState(() {
+                    addMessages(Message(text: DialogText(text: ["Es un artista con plan free o normal"])));
+                  });
+                }
+              });
+            }else{
+              setState(() {
+                addMessages(Message(text: DialogText(text: ["Es un fanatico"])));
+              });
+            }
+          });
+        }else if(obtainresponse!.text!.text!.first == "Los datos son los siguientes"){
+          artistService.existartistId(userId).then((resartist){
+            fanaticService.existfanaticId(userId).then((resfanatic){
+
+              if(resartist == true){
+                artistService.getArtistbyId(userId).then((resobjectartist){
+                  setState(() {
+                    addMessages(Message(text: DialogText(text: ["Nombre: ${resobjectartist.realname}\n Apellido: ${resobjectartist.lastname}\n Email: ${resobjectartist.email}\n Followers: ${resobjectartist.artistfollowers}"])));
+                  });
+                });
+              }
+
+              if(resfanatic == true){
+                fanaticService.getFanaticbyId(userId).then((resobjectfanatic){
+                  setState(() {
+                    addMessages(Message(text: DialogText(text: ["Nombre: ${resobjectfanatic.realname}\n Apellido: ${resobjectfanatic.lastname}\n Email: ${resobjectfanatic.email}\n Alias: ${resobjectfanatic.fanaticalias}"])));
+                  });
+                });
+              }
+
+            });
+          });
+        }
+        else{
           addMessages(response.message!);
         }
 
@@ -147,6 +272,18 @@ class _ChatState extends State<Chat> {
         }
 
         //Para crear eventos
+        //Para colocar el nombre del evento
+        if(obtainresponse!.text!.text!.first == "Genial! ahora coloque la descripción que desea para su nuevo evento"){
+          print(text);
+          print(obtainresponse!.text!.text!.first);
+
+          eventResource.name = text;
+          print(eventResource);
+          print(eventResource.name);
+        }
+
+
+        //Para colocar la descripcion del evento
         if(obtainresponse!.text!.text!.first == "Se creo el evento correctamente :D"){
           print(text);
           print(obtainresponse!.text!.text!.first);
@@ -159,8 +296,7 @@ class _ChatState extends State<Chat> {
                   print(ispremium);
 
                   if(ispremium == true){
-                    contevent+=1;
-                    eventService.addEvents("Event "+contevent.toString(),text,"https://teleticket.com.pe/","",userId);
+                    eventService.addEvents(eventResource.name,text,"https://teleticket.com.pe/","",userId);
                     setState(() {
                       addMessages(response.message!);
                     });
@@ -191,6 +327,29 @@ class _ChatState extends State<Chat> {
             }
           });
         }
+
+        //Para crear foros
+        //Para colocar su titulo del foro
+        if(obtainresponse!.text!.text!.first == "Perfecto! ahora coloque la descripción que desea para su nuevo foro"){
+          print(text);
+          print(obtainresponse!.text!.text!.first);
+
+          forumResource.forumname = text;
+          print(forumResource);
+          print(forumResource.forumname);
+        }
+
+        //Para colocar su descripcion del foro
+        if(obtainresponse!.text!.text!.first == "Se creo el foro correctamente :D"){
+          print(text);
+          print(obtainresponse!.text!.text!.first);
+
+          forumService.addForum(forumResource.forumname, text, userId);
+          setState(() {
+            addMessages(response.message!);
+          });
+        }
+
       });
     }
   }

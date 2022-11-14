@@ -5,7 +5,7 @@ import 'ArtistResource.dart';
 class EventResource{
 
   final int id;
-  final String name;
+  String name;
   final String description;
   final DateTime registerdate;
   final ArtistResource artist;
