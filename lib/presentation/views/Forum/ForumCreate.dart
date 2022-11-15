@@ -58,13 +58,11 @@ class _ForumCreateState extends State<ForumCreate> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: ScreenBase(
+    return  ScreenBase(
         body: Card(
           child: Column(
             children: [
-              Text(personResource.username),
+
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
@@ -111,22 +109,23 @@ class _ForumCreateState extends State<ForumCreate> {
                 ),
               ),
               SizedBox(height: 30),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    heroTag:
-                    "heroTag";
-                    AddForum();
-                  },
-                  shape: RoundedRectangleBorder(),
-                  child: Text("Create"),
-                ),
-              )
+               Container(
+                 width: 300,
+                 child:  FloatingActionButton(
+                   onPressed: () {
+                     heroTag:
+                     "heroTag";
+                     AddForum();
+                   },
+                   shape: RoundedRectangleBorder(),
+                   child: Text("Create"),
+                 ),
+               ),
+
+
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:fortloom/domain/entities/ArtistResource.dart';
+import 'package:fortloom/domain/entities/TagResource.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'dart:convert';
@@ -81,13 +82,39 @@ class ArtistService {
 
     };
     var body = json.encode(data);
-    final response = await http.post(Uri.parse(baseUrl + "/artist/"+artistId.toString()+"/tags"),
+
+    final response = await http.post(Uri.parse(baseUrl + "/artist/"+artistId.toString()+"/newtag"),
         headers: {"Content-Type": "application/json"}, body: body);
 
     log.i(response.body);
     log.i(response.statusCode);
 
     return response;
+
+
+
+
+  }
+  Future<List<TagResource>> GetTags(int artistId)async {
+
+    final response = await http.get(Uri.parse(baseUrl+"/artist/"+artistId.toString()+"/tags/"));
+    log.i(response.body);
+    log.i(response.statusCode);
+    List<TagResource>tags=[];
+    String body = utf8.decode(response.bodyBytes);
+    final jsonData = jsonDecode(body);
+    for (var item in jsonData["content"]){
+
+      ArtistResource artistResource=new ArtistResource(item["artist"]["id"],
+          item["artist"]["username"], item["artist"]["realname"], item["artist"]["lastname"], item["artist"]["email"],
+          item["artist"]["password"],  item["artist"]["artistfollowers"], item["artist"]["instagramLink"],
+          item["artist"]["facebookLink"],  item["artist"]["twitterLink"]);
+      TagResource tagResource= new TagResource(item["id"], item["name"], artistResource);
+      tags.add(tagResource);
+
+
+    }
+    return tags;
 
 
 

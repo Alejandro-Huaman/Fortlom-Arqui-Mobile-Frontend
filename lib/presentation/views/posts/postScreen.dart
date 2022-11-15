@@ -36,7 +36,14 @@ class _PostScreenState extends State<PostScreen> {
   final AuthService authService=AuthService();
   File? image;
   ImagePublicationService imagePublicationService= new ImagePublicationService();
-  Future pickImage() async{
+  Future pickImagefromGallery() async{
+    final image=await ImagePicker().pickImage(source: ImageSource.gallery);
+    if(image==null)return;
+    final imageTemporary = File(image.path);
+    setState(()=>this.image=imageTemporary);
+
+  }
+  Future pickImagefromCamera() async{
     final image=await ImagePicker().pickImage(source: ImageSource.camera);
     if(image==null)return;
     final imageTemporary = File(image.path);
@@ -44,11 +51,10 @@ class _PostScreenState extends State<PostScreen> {
 
   }
 
-
   List<PublicationResource> lstPosts = [];
   int userId=0;
   String username = "Usuario";
-
+  bool canpost=true;
 
   void PostImage(){
 
@@ -103,6 +109,8 @@ class _PostScreenState extends State<PostScreen> {
             userId = result.id;
           });
         });
+
+        canpost= this.authService.isfanatic(tep);
       });
     });
 
@@ -131,28 +139,43 @@ class _PostScreenState extends State<PostScreen> {
     }
 
     return ScreenBase(
-        body: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: Column(
-        children: [
-          newPostForm(),
-          const SizedBox(
-            height: 10,
-          ),
-          Expanded(
-            child: lstPosts.isNotEmpty
-                ? RefreshIndicator(
-                    child: ListView.builder(
-                        itemCount: lstPosts.length,
-                        itemBuilder: (context, index) {
-                          return PostWidget(post: lstPosts[index]);
-                        }),
-                    onRefresh: _pullRefresh)
-                : const Center(child: Text("No Posts")),
-          )
-        ],
-      ),
-    ));
+        body:
+        Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: NetworkImage("https://cdn.discordapp.com/attachments/1011046180064604296/1041115572852752465/artistlist.jpg"),
+                    fit: BoxFit.cover
+                )
+            ),
+          child:  Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Column(
+              children: [
+                if(!canpost)...[
+                  newPostForm(),
+                ],
+
+                const SizedBox(
+                  height: 10,
+                ),
+                Expanded(
+                  child: lstPosts.isNotEmpty
+                      ? RefreshIndicator(
+                      child: ListView.builder(
+                          itemCount: lstPosts.length,
+                          itemBuilder: (context, index) {
+                            return PostWidget(post: lstPosts[index]);
+                          }),
+                      onRefresh: _pullRefresh)
+                      : const Center(child: Text("No Posts")),
+                )
+              ],
+            ),
+
+
+          )),
+        );
+
   }
 
   Widget newPostForm() {
@@ -213,7 +236,68 @@ class _PostScreenState extends State<PostScreen> {
                 children: [
                   IconButton(
                       onPressed: () {
-                       pickImage();
+
+                        showDialog(
+                          context: context,
+                          builder: (context) => Dialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            elevation: 0.0,
+                            backgroundColor: Colors.grey,
+                            child:  Container(
+                              height:350,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Center(
+                                    child:Text(
+                                      "Metodo para conseguir imagen",
+                                      style: TextStyle(
+                                        fontSize: 20
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 20,),
+                                  ElevatedButton.icon(
+                                      onPressed: (){
+                                        pickImagefromGallery();
+                                      },
+                                      icon: Icon(
+                                        Icons.image_outlined,
+                                        size: 24.0,
+                                      ),
+                                      label: Text("Galeria")
+
+
+                                  ),
+                                  SizedBox(height: 10,),
+                                  ElevatedButton.icon(
+                                      onPressed: (){
+                                        pickImagefromCamera();
+                                      },
+                                      icon: Icon(
+                                        Icons.camera_alt_outlined,
+                                        size: 24.0,
+                                      ),
+                                      label: Text("Camara")
+
+
+                                  ),
+                                  SizedBox(height: 30,),
+
+                                ],
+                              ),
+
+                            ),
+
+
+
+
+
+                          ),
+                        );
+                       //pickImage();
                       },
                       icon: const Icon(
                         Icons.camera_alt,
@@ -238,7 +322,6 @@ class _PostScreenState extends State<PostScreen> {
                 ],
               ),
             ),
-
             image != null
                 ?Image.file(
               image!,
@@ -246,8 +329,11 @@ class _PostScreenState extends State<PostScreen> {
               height: 160,
               fit: BoxFit.cover,
             )
-                :FlutterLogo(size: 50),
-            SizedBox(height: 30)
+                :
+                Text("Esperando Imagen")
+
+
+           
 
           ],
         ));

@@ -64,7 +64,7 @@ class _artistSupportState extends State<artistSupport> {
           image: DecorationImage(
           image: NetworkImage(
           imageResource.imagenUrl),
-          fit: BoxFit.cover),
+          fit: BoxFit.fill),
           ),
           ),
           SizedBox(

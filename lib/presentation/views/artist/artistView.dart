@@ -9,6 +9,7 @@ import 'package:fortloom/presentation/views/artist/artistSupport.dart';
 import 'package:fortloom/presentation/widgets/sideBar/navigationBloc.dart';
 import 'package:http/src/response.dart';
 
+import '../../../core/framework/globals.dart';
 import '../../../core/service/AuthService.dart';
 import '../../../domain/entities/PersonResource.dart';
 import '../../widgets/screenBase.dart';
@@ -73,25 +74,35 @@ class _ArtistState extends State<ArtistView> {
 
     }
     return ScreenBase(
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Column(
-            children: [
+        body: Container(
+            height: ScreenWH(context).height,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: NetworkImage("https://cdn.discordapp.com/attachments/1011046180064604296/1041115572852752465/artistlist.jpg"),
+                    fit: BoxFit.cover
+                )
+            ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Column(
+              children: [
 
-              Expanded(
-                child: artits.isNotEmpty
-                    ? RefreshIndicator(
-                    child: ListView.builder(
-                        itemCount: artits.length,
-                        itemBuilder: (context, index) {
-                          return artistSupport(artistid: artits[index],userid: userid);
-                        }),
-                    onRefresh: _pullRefresh)
-                    : const Center(child: Text("No Artists")),
-              )
-            ],
-          ),
-        ));
+                Expanded(
+                  child: artits.isNotEmpty
+                      ? RefreshIndicator(
+                      child: ListView.builder(
+                          itemCount: artits.length,
+                          itemBuilder: (context, index) {
+                            return artistSupport(artistid: artits[index],userid: userid);
+                          }),
+                      onRefresh: _pullRefresh)
+                      : const Center(child: Text("No Artists")),
+                )
+              ],
+            ),
+          )),
+        );
+
 
   }
 }

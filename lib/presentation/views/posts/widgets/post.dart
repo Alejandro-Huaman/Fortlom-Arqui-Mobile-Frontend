@@ -1,6 +1,7 @@
 
 import 'dart:ui';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:fortloom/core/framework/globals.dart';
 import 'package:fortloom/core/service/ImagePublicationService.dart';
@@ -13,6 +14,8 @@ import 'package:fortloom/presentation/views/posts/widgets/comentsDialog.dart';
 import 'package:fortloom/presentation/views/posts/widgets/imagePost.dart';
 import 'package:fortloom/presentation/views/posts/widgets/reportDialog.dart';
 
+import '../../../../core/service/ImageUserService.dart';
+import '../../event/eventlike.dart';
 import '../../event/eventlistview.dart';
 
 class PostWidget extends StatefulWidget {
@@ -25,8 +28,22 @@ class PostWidget extends StatefulWidget {
 
 class _PostWidgetState extends State<PostWidget> {
   final PublicationService _postService = PublicationService();
+  final ImageUserService imageUserService=new ImageUserService();
   final ImagePublicationService imagePublicationService=ImagePublicationService();
   List<ImageResource> imalist = [];
+   ImageResource imageResource=new ImageResource(0, "https://cdn.discordapp.com/attachments/1008578583251406990/1031677299101286451/unknown.png", 0, "0", 0);
+  void getImage(int userId){
+
+    this.imageUserService.getImageByUserId(userId).then((value){
+      setState(() {
+        this.imageResource = value[0];
+      });
+    });
+
+  }
+
+
+
   int list=0;
   @override
   void initState() {
@@ -40,10 +57,8 @@ class _PostWidgetState extends State<PostWidget> {
         print(list);
       });
 
-
-
-
     });
+    getImage(widget.post.artistid);
 
   }
 
@@ -81,7 +96,10 @@ class _PostWidgetState extends State<PostWidget> {
               CircleAvatar(
                   radius: 20,
                   backgroundImage: NetworkImage(
-                      "https://source.unsplash.com/random/200x200?sig=${DateTime.now().millisecondsSinceEpoch}")),
+                      this.imageResource.imagenUrl
+
+                  )
+              ),
               SizedBox(width: 15),
               Text(
                 widget.post.artist.username,
@@ -123,15 +141,31 @@ class _PostWidgetState extends State<PostWidget> {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          if(list!=0)
-            ListView.builder(
+          if(list!=0)...[
+
+            CarouselSlider.builder(
+                itemCount: list,
+                itemBuilder: (context, index,realIndex) {
+                       return imagePost(image: imalist[index]);
+                },
+                options: CarouselOptions(height: 350,
+                viewportFraction: 1,
+                 enableInfiniteScroll: false
+                ),
+            )
+
+
+
+
+          ],
+           /* ListView.builder(
                 itemCount: list,
                 physics: ClampingScrollPhysics(),
 
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                        return imagePost(image: imalist[index]);
-                }),
+                }),*/
 
 
 

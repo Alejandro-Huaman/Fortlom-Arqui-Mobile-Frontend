@@ -30,9 +30,23 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         backgroundColor: background1,
       ),
-      body: Center(
-          child: Text('Welcome to Fortlom')
+      body: Container(
+        decoration: BoxDecoration(
+             image: DecorationImage(
+               image: NetworkImage("https://cdn.discordapp.com/attachments/1011046180064604296/1041115572852752465/artistlist.jpg"),
+               fit: BoxFit.cover
+             )
+        ),
+        child:  Center(
+            child: Text('Welcome to Fortlom',style: TextStyle(
+              color: Colors.white,
+              fontSize: 30,
+
+            ),)
+        ),
       ),
+
+
       floatingActionButton:FloatingActionButton(
         backgroundColor: Colors.black,
         onPressed: () {
