@@ -80,7 +80,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                     ),
                     color: widget.messages[index]['isUserMessage']
                         ? Colors.white
-                        : Colors.white.withOpacity(0.8)),
+                        : Colors.white),
                 constraints: BoxConstraints(maxWidth: w * 2 / 3),
                 child: Text(widget.messages[index]['message'].text.text[0])),
             SizedBox(width: 5,),

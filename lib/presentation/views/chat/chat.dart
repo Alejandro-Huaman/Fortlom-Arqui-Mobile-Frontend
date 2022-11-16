@@ -75,6 +75,12 @@ class _ChatState extends State<Chat> {
         backgroundColor: Colors.black,
       ),
       body: Container(
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/imgs/background_chatbot.jpg'),
+                fit: BoxFit.cover
+            )
+        ),
         child: Column(
           children: [
             Expanded(child: MessagesScreen(messages:messages)),
