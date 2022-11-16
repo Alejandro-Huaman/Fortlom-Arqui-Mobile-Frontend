@@ -17,50 +17,47 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        elevation: 0,
-        title: Container(
-          alignment: Alignment.center,
-          child: Image.asset('assets/imgs/logo.png',
-              height: ScreenWH(context).height * 0.1,
-              width: ScreenWH(context).width * 0.25),
+    return Stack(
+      children: [
+        Image.asset(
+          "assets/imgs/welcomeartist.png",
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          fit: BoxFit.fill,
         ),
-        backgroundColor: background1,
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-             image: DecorationImage(
-               image: NetworkImage("https://cdn.discordapp.com/attachments/1011046180064604296/1041115572852752465/artistlist.jpg"),
-               fit: BoxFit.cover
-             )
-        ),
-        child:  Center(
-            child: Text('Welcome to Fortlom',style: TextStyle(
+
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            elevation: 0,
+            title: Container(
+              alignment: Alignment.center,
+              child: Image.asset('assets/imgs/logo.png',
+                  height: ScreenWH(context).height * 0.1,
+                  width: ScreenWH(context).width * 0.25),
+            ),
+            backgroundColor: background1,
+          ),
+
+          floatingActionButton:FloatingActionButton(
+            elevation: 50,
+            backgroundColor: Colors.black,
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Chat())
+              );
+            },
+            child: const Icon(
+              Icons.adb,
               color: Colors.white,
-              fontSize: 30,
-
-            ),)
+            ),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         ),
-      ),
-
-
-      floatingActionButton:FloatingActionButton(
-        backgroundColor: Colors.black,
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Chat())
-          );
-        },
-        child: const Icon(
-          Icons.adb,
-          color: Colors.white,
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      ],
     );
+
   }
 }
