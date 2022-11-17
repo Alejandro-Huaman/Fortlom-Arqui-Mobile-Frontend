@@ -21,7 +21,9 @@ class ArtistResource{
 
   final String? twitterLink;
 
+  final String? aboutMe;
+
   ArtistResource(this.id,this.username,this.realname,this.lastname,this.email,this.password,
-                 this.artistfollowers,this.instagramLink,this.facebookLink,this.twitterLink);
+                 this.artistfollowers,this.instagramLink,this.facebookLink,this.twitterLink,this.aboutMe);
 
 }

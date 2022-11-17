@@ -8,7 +8,9 @@ import 'package:fortloom/core/service/ReportService.dart';
 import 'package:fortloom/domain/entities/ForumResource.dart';
 import 'package:fortloom/domain/entities/PersonResource.dart';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 
+import '../../../core/framework/globals.dart';
 import '../../../core/service/AuthService.dart';
 import '../../../core/service/ForumCommentService.dart';
 import '../../../domain/entities/ForumCommentResource.dart';
@@ -113,182 +115,215 @@ class _ForumPageState extends State<ForumPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: ScreenBase(
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Card(
-                color: Colors.grey,
-                child: Column(
-                  children: [
-                       Text(this.forumResourceo.forumname,
-                       style: TextStyle(fontSize: 20),
-                       ),
-                       SizedBox(height: 7),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: Colors.black54,
-                        ),
+    return  Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          elevation: 3,
+          title: Container(
+            padding: EdgeInsets.only(right: 50),
+            alignment: Alignment.center,
+            child: Image.asset('assets/imgs/logo.png',
+                height: ScreenWH(context).height * 0.1,
+                width: ScreenWH(context).width * 0.25),
+          ),
+          leading: IconButton(
+            onPressed: (){
+              Navigator.of(context).pop();
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        body: Container(
+          height: ScreenWH(context).height,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: NetworkImage("https://cdn.discordapp.com/attachments/1011046180064604296/1041115572852752465/artistlist.jpg"),
+                  fit: BoxFit.cover
+              )
+          ),
+          child:  SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: 30),
+                Card(
+                  color: Colors.grey,
+                  child: Column(
+                    children: [
+                      Text(this.forumResourceo.forumname,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      SizedBox(height: 7),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Colors.black54,
+                          ),
 
-                        child:IconButton(
-                            icon: const Icon(Icons.flag),
-                            onPressed: () {
-                              showDialog(context: context,
-                                  barrierDismissible: false,
-                                  builder: (context)=> AlertDialog(
+                          child:IconButton(
+                              icon: const Icon(Icons.flag),
+                              onPressed: () {
+                                showDialog(context: context,
+                                    barrierDismissible: false,
+                                    builder: (context)=> AlertDialog(
 
-                                    title: Text("Reporte al Foro"),
-                                    content: Container(
-                                      width: 200,
-                                      child: TextField(
-                                        keyboardType: TextInputType.multiline,
-                                        minLines: 1,
-                                        maxLines: 20,
-                                        maxLength: 100,
-                                        controller: report,
-                                        decoration: InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          hintText: 'Description',
+                                      title: Text("Reporte al Foro"),
+                                      content: Container(
+                                        width: 200,
+                                        child: TextField(
+                                          keyboardType: TextInputType.multiline,
+                                          minLines: 1,
+                                          maxLines: 20,
+                                          maxLength: 100,
+                                          controller: report,
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            hintText: 'Description',
 
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    actions: [
+                                      actions: [
                                         FloatingActionButton(
-                                             child:Text("Ok"),
-                                             onPressed: (){
+                                          child:Text("Ok"),
+                                          onPressed: (){
 
-                                                  AddReport();
+                                            AddReport();
 
-                                                 Fluttertoast.showToast(
-                                                     msg: "Reporte Enviado",
-                                                     toastLength: Toast.LENGTH_SHORT,
-                                                     gravity: ToastGravity.CENTER,
-                                                     textColor: Colors.white,
-                                                     fontSize: 16.0
+                                            Fluttertoast.showToast(
+                                                msg: "Reporte Enviado",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.CENTER,
+                                                textColor: Colors.white,
+                                                fontSize: 16.0
 
-                                                 );
-
-
+                                            );
 
 
-                                             Navigator.of(context).pop();
-                                             },),
 
 
-                                      FloatingActionButton(
-                                      child:Text("Cancel"),
-                                      onPressed: (){
-                                      Navigator.of(context).pop();
-                                       },
-                                       )
-                                    ],
+                                            Navigator.of(context).pop();
+                                          },),
 
-                                  )
 
-                                  );
-                            }
+                                        FloatingActionButton(
+                                          child:Text("Cancel"),
+                                          onPressed: (){
+                                            Navigator.of(context).pop();
+                                          },
+                                        )
+                                      ],
+
+                                    )
+
+                                );
+                              }
+                          ),
                         ),
-                      ),
                       ) ,
 
-                    Align(
+                      Align(
                         alignment: Alignment.topLeft,
                         child:Text(this.forumResourceo.person.realname+"    "+ this.forumResourceo.person.lastname,
                           style: TextStyle(
                               fontSize: 15
                           ),
                         ),
-                    ),
-                    Align(
+                      ),
+                      SizedBox(height: 10),
+                      Align(
                         alignment: Alignment.topLeft,
                         child:Text(this.forumResourceo.forumdescription,
                           style: TextStyle(
-                              fontSize: 10
+                              fontSize: 20
                           ),
                         ),
-                    ),
+                      ),
 
-                  ],
+                    ],
+                  ),
                 ),
-              ),
 
-              FutureBuilder<List<ForumCommentResource>>(
-                future: getdata(forumResourceo.id),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) print(snapshot.error);
-                  if(snapshot.hasData){
+                FutureBuilder<List<ForumCommentResource>>(
+                  future: getdata(forumResourceo.id),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) print(snapshot.error);
+                    if(snapshot.hasData){
 
 
-                    return itemList(list: snapshot.data,report: this.report,personResource: this.personResource,);
+                      return itemList(list: snapshot.data,report: this.report,personResource: this.personResource,);
 
-                  }
-                  return Text("Correct");
+                    }
+                    return Text("No Comments Available");
 
-                },
-              ),
-              Align(
-                alignment: Alignment.topRight,
-                child: Container(
-                  width: 200,
-                  child: Card(
-                    color: Colors.grey,
-                    child: Column(
-                      children: [
-                        Text("Write a Comment",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        SizedBox(height: 10),
-                        Container(
-                          width: 200,
+                  },
+                ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    width: 200,
+                    child: Card(
+                      color: Colors.grey,
+                      child: Column(
+                        children: [
+                          Text("Write a Comment",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            width: 200,
 
-                          child:TextField(
-                            keyboardType: TextInputType.multiline,
-                            minLines: 1,
-                            maxLines: 20,
-                            maxLength: 1000,
-                            controller: createcomment,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'Description',
+                            child:TextField(
+                              keyboardType: TextInputType.multiline,
+                              minLines: 1,
+                              maxLines: 20,
+                              maxLength: 1000,
+                              controller: createcomment,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText: 'Description',
 
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            FloatingActionButton(onPressed:(){
-                              AddForumComment();
-                            },
-                              shape: RoundedRectangleBorder(),
-                              child: Text("Accept"),
-                            ) ,
-                            FloatingActionButton(onPressed:(){
-                                   createcomment.text="";
-                            },
-                              shape: RoundedRectangleBorder(),
-                              backgroundColor: Colors.red,
-                              child: Text("Delete"),
-                            ) ,
-                          ],
-                        ),
-                      ],
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              FloatingActionButton(onPressed:(){
+                                AddForumComment();
+                              },
+                                shape: RoundedRectangleBorder(),
+                                child: Text("Accept"),
+                              ) ,
+                              FloatingActionButton(onPressed:(){
+                                createcomment.text="";
+                              },
+                                shape: RoundedRectangleBorder(),
+                                backgroundColor: Colors.red,
+                                child: Text("Delete"),
+                              ) ,
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ),
-    );
+        )
+
+
+
+
+      );
+
   }
 }
 
@@ -424,7 +459,8 @@ class itemList extends StatelessWidget {
                       ),
                       Align(
                         alignment: Alignment.topRight,
-                        child:Text(list![index].registerdate.toString(),
+                        child:Text(
+                            DateFormat('yyyy-MM-dd').format(list![index].registerdate as DateTime),
                           style: TextStyle(
                               fontSize: 15
                           ),

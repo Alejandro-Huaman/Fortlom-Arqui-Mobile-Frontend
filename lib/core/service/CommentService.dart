@@ -38,7 +38,7 @@ class CommentService {
         DateTime tsdate2 = DateTime.fromMillisecondsSinceEpoch(item["publication"]["registerdate"]);
         PersonResource personResource=PersonResource(item["userAccount"]["id"], item["userAccount"]["username"], item["userAccount"]["realname"], item["userAccount"]["lastname"],
             item["userAccount"]["email"], item["userAccount"]["password"]);
-        ArtistResource artistResource=ArtistResource(0, "username", "realname", "lastname", "email", "password", 0, "instagramLink", "facebookLink", "twitterLink");
+        ArtistResource artistResource=ArtistResource(0, "username", "realname", "lastname", "email", "password", 0, "instagramLink", "facebookLink", "twitterLink","AboutMe");
         PublicationResource publicationResource=PublicationResource(
             item["publication"]["id"],
             item["publication"]["description"] ,
@@ -56,7 +56,7 @@ class CommentService {
 
         PersonResource personResource=PersonResource(item["userAccount"]["id"], item["userAccount"]["username"], item["userAccount"]["realname"], item["userAccount"]["lastname"],
             item["userAccount"]["email"], item["userAccount"]["password"]);
-        ArtistResource artistResource=ArtistResource(0, "username", "realname", "lastname", "email", "password", 0, "instagramLink", "facebookLink", "twitterLink");
+        ArtistResource artistResource=ArtistResource(0, "username", "realname", "lastname", "email", "password", 0, "instagramLink", "facebookLink", "twitterLink","Aboutme");
         PublicationResource publicationResource=PublicationResource(item["publication"]["id"],item["publication"]["description"] ,
             item["publication"]["image"], null,item["publication"]["artistid"] , artistResource);
         PublicationCommentResource publicationCommentResource = PublicationCommentResource(item["id"], null ,0,

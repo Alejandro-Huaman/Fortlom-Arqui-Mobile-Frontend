@@ -101,26 +101,63 @@ class _artistFollowState extends State<artistFollow> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(setfollowsartists.toString()),
-        TextButton(
-            child:Text("FOLLOW"),
-            onPressed: (){
-              checkfanaticandartisfollows();
-            }
-        ),
-        TextButton(
-            child:Text("UNFOLLOW"),
-            onPressed: (){
-              checkfanaticandartisunfollows();
-            }
-        ),
+    return Column(
+       children: [
 
-      ],
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
+         Wrap(
 
+           crossAxisAlignment: WrapCrossAlignment.center,
+           children: [
+
+             Icon(Icons.people,color: Color(0xffcca027),size: 30,),
+             SizedBox(width: 5,),
+             Text('Followers:',style: TextStyle(
+
+               fontSize: 30
+             ),),
+             SizedBox(width: 2,),
+             Text(setfollowsartists.toString(),style: TextStyle(
+                 fontSize: 30
+             ),),
+           ],
+
+
+         ),
+
+                 Row(
+    children: [
+              Icon(Icons.favorite,color: Colors.red,),
+              TextButton(
+                child:Text("FOLLOW",
+    style: TextStyle(
+    color: Colors.black,
+    fontSize: 15
+    ),
+    ),
+                 onPressed: (){
+                 checkfanaticandartisfollows();
+                  }
+              ),
+               Icon(Icons.heart_broken,color: Colors.red,),
+              TextButton(
+    child:Text("UNFOLLOW",
+    style: TextStyle(
+    color: Colors.black,
+    fontSize: 15
+    ),
+    ),
+    onPressed: (){
+    checkfanaticandartisunfollows();
+    }
+    ),
+
+    ],
+    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisAlignment: MainAxisAlignment.center,
+
+    ),
+       ],
     );
+
   }
 }

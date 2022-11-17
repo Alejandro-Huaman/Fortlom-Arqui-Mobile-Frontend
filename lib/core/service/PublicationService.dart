@@ -35,7 +35,7 @@ class PublicationService{
           item["artist"]["artistfollowers"],
           item["artist"]["instagramLink"],
           item["artist"]["facebookLink"],
-          item["artist"]["twitterLink"]);
+          item["artist"]["twitterLink"],item["aboutMe"]);
       if(item["registerdate"].runtimeType!=Null){
         DateTime tsdate = DateTime.fromMillisecondsSinceEpoch(item["registerdate"]);
         PublicationResource publicationResource= PublicationResource(item["id"], item["description"],item["image"] ,tsdate ,
@@ -62,7 +62,7 @@ class PublicationService{
     return lstPosts;
 
   }
-  Future<http.Response> addPost(
+  Future<int> addPost(
       String description, int artistId,String type) async {
     Map data = {
 
@@ -76,7 +76,10 @@ class PublicationService{
         body: body);
     log.i(response.body);
     log.i(response.statusCode);
-    return response;
+    String boydpage = utf8.decode(response.bodyBytes);
+    final jsonData = jsonDecode(boydpage);
+     print(jsonData["id"]);
+    return jsonData["id"];
 
 
   }

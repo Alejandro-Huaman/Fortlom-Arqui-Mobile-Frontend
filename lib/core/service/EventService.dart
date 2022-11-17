@@ -19,7 +19,7 @@ class EventService{
     for (var item in jsonData["content"]){
       ArtistResource artistResource= new ArtistResource(item["artist"]["id"],item["artist"]["username"] ,item["artist"]["realname"] ,item["artist"]["lastname"] ,
           item["artist"]["email"], item["artist"]["password"],item["artist"]["artistfollowers"], item["artist"]["instagramLink"],
-          item["artist"]["facebookLink"], item["artist"]["twitterLink"]);
+          item["artist"]["facebookLink"], item["artist"]["twitterLink"],item["aboutMe"]);
 
       if(item["releasedDate"].runtimeType!=Null){
 

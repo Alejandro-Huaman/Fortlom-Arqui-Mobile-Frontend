@@ -33,7 +33,7 @@ class PostService {
           item["artist"]["artistfollowers"],
           item["artist"]["instagramLink"],
           item["artist"]["facebookLink"],
-          item["artist"]["twitterLink"]);
+          item["artist"]["twitterLink"],item["aboutMe"]);
 
       Post postResource = Post(
           item["id"],

@@ -16,17 +16,52 @@ class ImageUserService{
   var baseUrl = "https://fortlom-multimedia.herokuapp.com/api/v1/multimediaservice";
 
 
-  Future<http.Response> createimageforuser(int userId,File file) async{
+  Future<int> createimageforuser(int userId,File file) async{
 
 
-    final response = await http.post(Uri.parse("${baseUrl}/upload/users/${userId}/images"),
-        headers: {"Content-Type": "application/json"}, body: file
-    );
-    log.i(response.body);
+
+
+
+
+
+    final postUri = Uri.parse("${baseUrl}/upload/users/${userId}/images");
+    http.MultipartRequest request = new http.MultipartRequest("POST", postUri);
+
+    http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
+        'multipartFile', file.path);
+
+    request.files.add(multipartFile);
+
+    http.StreamedResponse response = await request.send();
+
     log.i(response.statusCode);
 
-    return response;
+    return response.statusCode;
+
+
+
+
+
+
+
   }
+  Future<String> getUserImageforPublication (int UserId) async {
+    final response = await http.get(Uri.parse(baseUrl+"/users/${UserId}/images"));
+    List<ImageResource> lstPosts = [];
+    log.i(response.body);
+    log.i(response.statusCode);
+    String body = utf8.decode(response.bodyBytes);
+    final jsonData = jsonDecode(body);
+    for (var item in jsonData["content"]) {
+      ImageResource imageResource=ImageResource(item["id"], item["imagenUrl"], item["userid"], item["imagenId"], item["publicationid"]);
+      lstPosts.add(imageResource);
+    }
+    ImageResource imageResource=lstPosts[0];
+    return imageResource.imagenUrl;
+
+  }
+
+
   Future<List<ImageResource>>getImageByUserId(int publicationsId)async{
     final response = await http.get(Uri.parse(baseUrl+"/users/${publicationsId}/images"));
     List<ImageResource> lstPosts = [];
@@ -41,9 +76,10 @@ class ImageUserService{
 
     }
     return lstPosts;
+
   }
   Future<http.Response>delete(int id)async{
-    final response = await http.get(Uri.parse(baseUrl+"/delete/${id}"));
+    final response = await http.delete(Uri.parse(baseUrl+"/delete/${id}"));
     log.i(response.body);
     log.i(response.statusCode);
     return response;

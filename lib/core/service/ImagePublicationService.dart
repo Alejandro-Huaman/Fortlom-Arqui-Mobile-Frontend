@@ -1,6 +1,9 @@
 
 
-import 'dart:io';
+
+
+
+import 'dart:io' as io;
 
 import 'package:fortloom/domain/entities/ImageResource.dart';
 import 'package:http/http.dart' as http;
@@ -10,16 +13,22 @@ class ImagePublicationService{
   var log = Logger();
   var baseUrl = "https://fortlom-multimedia.herokuapp.com/api/v1/multimediaservice";
 
-  Future<http.Response> createimageforpublication(int publicationsId,File file) async{
+  Future<int> createimageforpublication(int publicationsId,io.File image) async{
 
 
-    final response = await http.post(Uri.parse("${baseUrl}/upload/publications/${publicationsId}/images"),
-        headers: {"Content-Type": "application/json"}, body: file
-    );
-    log.i(response.body);
+   final postUri = Uri.parse("${baseUrl}/upload/publications/${publicationsId}/images");
+   http.MultipartRequest request = new http.MultipartRequest("POST", postUri);
+
+   http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
+       'multipartFile', image.path);
+
+   request.files.add(multipartFile);
+
+   http.StreamedResponse response = await request.send();
+
     log.i(response.statusCode);
 
-    return response;
+    return response.statusCode;
   }
   Future<List<ImageResource>>getImageByPublicationId(int publicationsId)async{
     final response = await http.get(Uri.parse(baseUrl+"/publications/${publicationsId}/images"));

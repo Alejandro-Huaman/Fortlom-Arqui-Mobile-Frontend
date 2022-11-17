@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import '../../../core/service/AuthService.dart';
 import '../../../core/service/EventService.dart';
 import '../../../domain/entities/PersonResource.dart';
+import 'PostEventForm.dart';
 
 class EventMainView extends StatefulWidget with NavigationStates{
   const EventMainView({Key? key}) : super(key: key);
@@ -30,6 +31,7 @@ class _EventState extends State<EventMainView> {
   var nametextfield = TextEditingController();
   var descriptiontextfield = TextEditingController();
   var datetextfield = TextEditingController();
+  var tickettextfield= TextEditingController();
   String fechastring = "fecha";
   DateTime fechadescription = DateTime(2022,06,15);
   DateTime fechapredefinida = DateTime.now();
@@ -37,24 +39,45 @@ class _EventState extends State<EventMainView> {
   @override
   Widget build(BuildContext context) {
     return ScreenBase(
-      body:SingleChildScrollView(
-          child:Center(
-            child:Container(
-              child:Column(
-                  children: <Widget>[
-                    SizedBox(height: 10,),
-                    if(isupdagrade)...[
-                      CardMainEvent(),
-                    ],
-                    SizedBox(height: 10,),
-                    ShowForm(),
-                    SizedBox(height: 10,),
-                    ShowButtons()
-                  ]
+      body: Container(
+           height: ScreenWH(context).height,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: NetworkImage("https://cdn.discordapp.com/attachments/1011046180064604296/1041115572852752465/artistlist.jpg"),
+                  fit: BoxFit.cover
               )
-            )
+          ),
+          child: SingleChildScrollView(
+              child:Center(
+                  child:Container(
+                      child:Column(
+                          children: <Widget>[
+                            SizedBox(height: 30,),
+                            Center(
+                              child: Text(
+                                "Look for the most emotional events of the artists",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 50,
+                                   color: Color(0xfff5f5f5),
+                                  fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 30,),
+                            if(isupdagrade)...[
+                              CardMainEvent(),
+                            ],
+                            SizedBox(height: 10,),
+                            SizedBox(height: 10,),
+                            ShowButtons()
+                          ]
+                      )
+                  )
+              )
           )
       )
+
     );
   }
 
@@ -88,143 +111,95 @@ class _EventState extends State<EventMainView> {
     return Card(
       child:Container(
           padding: EdgeInsets.all(10),
-          width: 200,
-          height: 200,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.black54,
+                  width: 5
+            )
+          ),
+          width: 400,
+          height: 350,
           child:Column(
             children:<Widget> [
-              Text('Make a Event!'),
+              Text('Make a Event!',style: TextStyle(
+                  fontSize: 24,
+                color: Colors.black
+              ),),
               SizedBox(height: 10,),
               Image(
-                  image: AssetImage('assets/imgs/events_image.jpg'),
-                  height: 100,
+                image: AssetImage('assets/imgs/events_image.jpg'),
+                height: 200,
+                width: 500,
               ),
-              SizedBox(height: 5,),
-              FloatingActionButton(
-                  onPressed: (){
-                    setState(() {
-                      post = true;
-                    });
-                    print(post);
+              SizedBox(height: 10,),
+              Container(
+
+                width: 350,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () async {
+
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PostEventForm(artist:this.personResource.id)),
+                    );
+
+
+
+
                   },
-                  child: Text("Post Event"),
-                  backgroundColor: Colors.white,
+                  child: Text("Post Event",style: TextStyle(
+                        color: Colors.black,
+                    fontSize: 16
+
+                  ),),
+                  style: TextButton.styleFrom(backgroundColor: Color(0xffA3C6E8)),
+                ),
               )
+
             ],
           )
       )
     );
   }
 
-  Widget PostEventForm(){
-    return Card(
-        child: Container(
-            width: 350,
-            height: 250,
-            child: Column(
-              children: <Widget>[
-                Text("Create your Event!"),
-                SizedBox(height: 10,),
-                TextField(
-                  controller: nametextfield,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(10),
-                    hintText: 'EventName',
-                  ),
-                ),
-                SizedBox(height: 10,),
-                TextField(
-                  controller: descriptiontextfield,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(10),
-                    hintText: 'EventDescription',
-                  ),
-                ),
-                SizedBox(height: 10,),
-                IconButton(
-                    onPressed: () async{
-                        DateTime? newDate = await showDatePicker(
-                            context: context,
-                            firstDate: DateTime(1900),
-                            lastDate: DateTime(2100),
-                            initialDate: fechapredefinida
-                        );
 
-                        if(newDate == null) return;
-                        setState(() {
-                          fechadescription = newDate;
-                          print(fechadescription);
-                        });
-                      },
-                    icon: Icon(Icons.calendar_month)
-                ),
-                SizedBox(height: 10,),
-                Row(
-                  children: <Widget>[
-                    SizedBox(width: 10,),
-                    FloatingActionButton(
-                        onPressed: (){
-                          setState(() {
-                            post = false;
-                          });
-                          print(post);
-                        },
-                        child:Text("Cancel"),
-                        backgroundColor:Colors.white
-                    ),
-                    SizedBox(width: 10,),
-                    FloatingActionButton(
-                        onPressed: (){
-                          nametextfield.text = '';
-                          descriptiontextfield.text = '';
-                          datetextfield.text = '';
-                        },
-                        child:Text("Clean"),
-                        backgroundColor:Colors.white
-                    ),
-                    SizedBox(width: 10,),
-                    FloatingActionButton(
-                        onPressed: (){
-                          print("Fecha a utilizar: $fechadescription");
-                          String fechaevento = DateFormat('yyyy-MM-ddTHH:mm:ss').format(fechadescription); //parse me ayuda para convertir un string a Datetime y format de datetime a string
-                          print("Nueva Fecha convertida: $fechaevento");
-                          eventService.addEvents(nametextfield.text.trim(), descriptiontextfield.text.trim(), "link", fechaevento, personResource.id);
-                        },
-                        child:Text("Create and Post"),
-                        backgroundColor:Colors.white
-                    )
-                  ],
-                )
-              ],
-          )
-        )
-    );
-  }
 
   Widget ShowButtons(){
     return Center(
-          child: FloatingActionButton(
-              onPressed: (){
+
+       child: Container(
+            width: 400,
+            height: 100,
+
+            decoration: BoxDecoration(
+              color: Colors.redAccent,
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            child: InkWell(
+              onTap: (){
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => EventListView())
+                    context,
+                    MaterialPageRoute(builder: (context) => EventListView())
                 );
               },
-              child: Text("Show All Events"),
-              backgroundColor:Colors.white
-          ),
+              child: Center(
+                child: Text("Show All Events",style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold
+
+                )),
+              )
+
+              //colo:Colors.black54
+            ),
+          )
+
         );
   }
 
-  Widget ShowForm(){
-    if(post){
-      return PostEventForm();
-    }else{
-      return Icon(
-          Icons.cancel,
-          color: Colors.white
-      );
-    }
-  }
+
 
 }
 
