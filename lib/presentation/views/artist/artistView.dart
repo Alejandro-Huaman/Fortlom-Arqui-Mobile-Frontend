@@ -86,7 +86,42 @@ class _ArtistState extends State<ArtistView> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               children: [
+                Container(
+                  width: 300,
+                  child:  Text(
+                      "Get to know some of",
+                      style:TextStyle(fontSize: 30,
+                          color: Color(0xfff5f5f5),
+                          fontWeight: FontWeight.bold)
 
+                  ),
+                ),
+                Container(
+                  width: 300,
+                  child:Center(
+                    child: Text(
+                        "the most trending",
+                        style:TextStyle(fontSize: 30,
+                            color: Color(0xfff5f5f5),
+                            fontWeight: FontWeight.bold)
+
+                    ),
+                  ),
+
+                ),
+                Container(
+                  width: 300,
+                  child:Center(
+                    child: Text(
+                        "artist right now",
+                        style:TextStyle(fontSize: 30,
+                            color: Color(0xfff5f5f5),
+                            fontWeight: FontWeight.bold)
+
+                    ),
+                  ),
+
+                ),
                 Expanded(
                   child: artits.isNotEmpty
                       ? RefreshIndicator(

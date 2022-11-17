@@ -35,7 +35,7 @@ class PublicationService{
           item["artist"]["artistfollowers"],
           item["artist"]["instagramLink"],
           item["artist"]["facebookLink"],
-          item["artist"]["twitterLink"]);
+          item["artist"]["twitterLink"],item["aboutMe"]);
       if(item["registerdate"].runtimeType!=Null){
         DateTime tsdate = DateTime.fromMillisecondsSinceEpoch(item["registerdate"]);
         PublicationResource publicationResource= PublicationResource(item["id"], item["description"],item["image"] ,tsdate ,

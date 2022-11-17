@@ -6,6 +6,8 @@ import 'package:fortloom/core/service/CommentService.dart';
 import 'package:fortloom/domain/entities/CommentResource.dart';
 import 'package:fortloom/domain/entities/PublicationCommentResource.dart';
 
+import 'Comment.dart';
+
 class CommetsDialog extends StatefulWidget {
   const CommetsDialog({Key? key, required this.postId}) : super(key: key);
   final int postId;
@@ -65,7 +67,7 @@ class _CommetsDialogState extends State<CommetsDialog> {
           child: Padding(
             padding: EdgeInsets.only(left: 20, top: 10),
             child: Text(
-              'Make a Post',
+              'Make a Comment',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
@@ -150,7 +152,7 @@ class _CommetsDialogState extends State<CommetsDialog> {
                       child: ListView.builder(
                           itemCount: lstComments.length,
                           itemBuilder: (context, index) {
-                            return CommetnWidget(lstComments[index]);
+                            return CommentWid(comment:lstComments[index]);
                           }),
                     )
                   : const Center(

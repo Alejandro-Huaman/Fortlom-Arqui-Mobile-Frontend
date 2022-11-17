@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import '../../../core/service/AuthService.dart';
 import '../../../core/service/EventService.dart';
 import '../../../domain/entities/PersonResource.dart';
+import 'PostEventForm.dart';
 
 class EventMainView extends StatefulWidget with NavigationStates{
   const EventMainView({Key? key}) : super(key: key);
@@ -51,6 +52,18 @@ class _EventState extends State<EventMainView> {
                   child:Container(
                       child:Column(
                           children: <Widget>[
+                            SizedBox(height: 30,),
+                            Center(
+                              child: Text(
+                                "Look for the most emotional events of the artists",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 50,
+                                   color: Color(0xfff5f5f5),
+                                  fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            ),
                             SizedBox(height: 30,),
                             if(isupdagrade)...[
                               CardMainEvent(),
@@ -123,12 +136,17 @@ class _EventState extends State<EventMainView> {
 
                 width: 350,
                 height: 50,
-                child: TextButton(
-                  onPressed: (){
+                child: ElevatedButton(
+                  onPressed: () async {
 
-                    showDialog(context: context,
-                    barrierDismissible: false,
-                    builder: (context)=>PostEventForm());
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PostEventForm(artist:this.personResource.id)),
+                    );
+
+
+
+
                   },
                   child: Text("Post Event",style: TextStyle(
                         color: Colors.black,
@@ -145,145 +163,7 @@ class _EventState extends State<EventMainView> {
     );
   }
 
-  Widget PostEventForm(){
-    return AlertDialog(
-        content: Container(
 
-            child: Column(
-              children: <Widget>[
-                Text("Create your Event!",style: TextStyle(
-                     fontSize: 30
-                ),),
-                SizedBox(height: 20,),
-                TextField(
-                  controller: nametextfield,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(10),
-                    hintText: 'EventName',
-                  ),
-                ),
-                SizedBox(height: 10,),
-                TextField(
-                  controller: descriptiontextfield,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(10),
-                    hintText: 'EventDescription',
-                  ),
-                ),
-                SizedBox(height: 10,),
-                TextField(
-                  controller: tickettextfield,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(10),
-                    hintText: 'TiecktLink',
-                  ),
-                ),
-                IconButton(
-                    onPressed: () async{
-                        DateTime? newDate = await showDatePicker(
-                            context: context,
-                            firstDate: DateTime(1900),
-                            lastDate: DateTime(2100),
-                            initialDate: fechapredefinida
-                        );
-
-                        if(newDate == null) return;
-                        setState(() {
-                          fechadescription = newDate;
-                          print(fechadescription);
-                        });
-                      },
-                    icon: Icon(Icons.calendar_month)
-                ),
-                SizedBox(height: 10,),
-                Center(
-                  child: Row(
-                    children: <Widget>[
-                      SizedBox(width: 10,),
-                      Container(
-                        width: 125,
-                        child: TextButton(
-                          onPressed: (){
-                            setState(() {
-                              post = false;
-                            });
-                            print(post);
-                            Navigator.of(context).pop();
-                          },
-                          child:Text("Cancel",style: TextStyle(color: Colors.black)),
-                          style: TextButton.styleFrom(backgroundColor: Colors.red),
-                        ),
-                      ),
-
-                      SizedBox(width: 10,),
-                      Container(
-                          width: 125,
-                          child: TextButton(
-                            onPressed: (){
-                              nametextfield.text = '';
-                              descriptiontextfield.text = '';
-                              datetextfield.text = '';
-                            },
-                            child:Text("Clean",style: TextStyle(color: Colors.black)),
-                            style: TextButton.styleFrom(backgroundColor: Colors.deepOrangeAccent),
-
-                          ),
-                      ),
-
-                      SizedBox(width: 10,),
-
-                    ],
-                  ),
-                ),
-                SizedBox(height: 10,),
-                Container(
-                  height: 150,
-                  width: 250,
-                  child: TextButton(
-                    onPressed: (){
-                      print("Fecha a utilizar: $fechadescription");
-                      String fechaevento = DateFormat('yyyy-MM-ddTHH:mm:ss').format(fechadescription); //parse me ayuda para convertir un string a Datetime y format de datetime a string
-                      print("Nueva Fecha convertida: $fechaevento");
-                      showDialog(context: context,
-                          barrierDismissible: false,
-                          builder: (context)=> AlertDialog(
-                            title: Text("¿Quiere crear un evento?"),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(32.0))
-                            ),
-                            actions: [
-                              TextButton(onPressed:(){
-                                eventService.addEvents(nametextfield.text.trim(), descriptiontextfield.text.trim(), tickettextfield.text.trim(),
-                                    fechaevento, personResource.id).then((value){
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
-                                });
-
-                              }, child: Text(
-                                  "Crear"
-                              )),
-                              TextButton(onPressed:(){
-
-                                Navigator.of(context).pop();
-                              }, child: Text(
-                                  "Cancelar"
-                              )),
-                            ],
-
-                          ));
-
-                    },
-                    child:Text("Create and Post",style: TextStyle(color: Colors.black),),
-                    style: TextButton.styleFrom(backgroundColor: Colors.blueAccent),
-
-                  ),
-                )
-
-              ],
-          )
-        )
-    );
-  }
 
   Widget ShowButtons(){
     return Center(
@@ -306,7 +186,8 @@ class _EventState extends State<EventMainView> {
               child: Center(
                 child: Text("Show All Events",style: TextStyle(
                     color: Colors.black,
-                    fontSize: 20
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold
 
                 )),
               )
@@ -318,16 +199,7 @@ class _EventState extends State<EventMainView> {
         );
   }
 
-  Widget ShowForm(){
-    if(post){
-      return PostEventForm();
-    }else{
-      return Icon(
-          Icons.cancel,
-          color: Colors.black54
-      );
-    }
-  }
+
 
 }
 

@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:fortloom/core/service/ForumService.dart';
+import 'package:fortloom/presentation/views/Forum/Forum.dart';
 import 'package:fortloom/presentation/views/Forum/ForumCreate.dart';
 import 'package:fortloom/presentation/views/Forum/ForumPage.dart';
 import 'package:fortloom/presentation/widgets/screenBase.dart';
@@ -32,8 +33,14 @@ class _ForumSectionState extends State<ForumSection> {
 
      return forumService.getall();
    }
+  Future<void> _pullRefresh() async {
+    forumService.getall().then((value) {
+      setState(() {
+        getforums = value;
 
-
+      });
+    });
+  }
   navigatetoForumCreate(BuildContext context) async {
     final result = await Navigator.push(
       context,
@@ -52,7 +59,13 @@ class _ForumSectionState extends State<ForumSection> {
   void initState() {
 
     super.initState();
-    this.getdata();
+    forumService.getall().then((value) {
+      setState(() {
+        getforums = value;
+        print(getforums.length);
+
+      });
+    });
 
   }
 
@@ -72,73 +85,74 @@ class _ForumSectionState extends State<ForumSection> {
                        fit: BoxFit.cover
                    )
                ),
-               child:  SingleChildScrollView(
-                 physics: ClampingScrollPhysics(),
-                 child:  Column (
-                   children: <Widget>[
+               child:
 
 
-                     Center(
-                       child: Text(
-                         'Forums',
-                         style: TextStyle(
-                           fontFamily: 'Roboto',
-                           fontSize: 36,
-                           color: Colors.white
-                         ),
 
-                       ),
-                     ),
-                     SizedBox(height: 30),
-                     Container(
-                       width: 400,
-                       height: 100,
-                       child: TextButton(onPressed: () => navigatetoForumCreate(context),
-                         child: Text("Create Forum",
-                           style: TextStyle(
-                               color: Colors.black54,
-                             fontSize: 50
+                     Padding(
+                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                       child:Column(
+                         children: <Widget>[
+                           Center(
+                             child: Text(
+                               'Forums',
+                               style: TextStyle(
+                                   fontFamily: 'Roboto',
+                                   fontSize: 50,
+                                   color: Colors.white,
+                                   fontWeight:FontWeight.w900
 
+                               ),
+
+                             ),
                            ),
-                         ),
-                         style: TextButton.styleFrom(
-                           backgroundColor: Colors.cyan,
-                           padding: const EdgeInsets.all(16.0),
-                         ),
+                           SizedBox(height: 30),
+                           Container(
+                             width: 400,
+                             height: 100,
+                             child: ElevatedButton(onPressed: () => navigatetoForumCreate(context),
 
+                               child: Text("Create Forum",
+                                 style: TextStyle(
+                                     color: Colors.black54,
+                                     fontSize: 50
+
+                                 ),
+                               ),
+                               style: TextButton.styleFrom(
+                                 backgroundColor: Colors.cyan,
+                                 padding: const EdgeInsets.all(16.0),
+                               ),
+
+                             ),
+                           ),
+                           SizedBox(height: 30),
+                           Expanded(
+                               child: getforums.isNotEmpty
+                                   ? RefreshIndicator(
+                                   child: ListView.builder(
+                                       itemCount: getforums.length,
+                                       itemBuilder: (context,index){
+                                         return ForumWidget(forum:getforums[index]);
+                                       }
+                                   ),
+                                   onRefresh: _pullRefresh)
+                                   : const Center(child: Text("No Forums Avaliable",textAlign: TextAlign.center,style: TextStyle(
+                                       fontSize: 30,color: Colors.white,fontWeight: FontWeight.w800
+                               ),),)
+                           )
+
+                         ],
                        ),
                      ),
 
 
 
-                     SizedBox(height: 30),
-                     FutureBuilder<List<ForumResource>>(
-                       future: getdata(),
-                       builder: (context, snapshot) {
-                         if (snapshot.hasError) print(snapshot.error);
-                         if(snapshot.hasData){
-                           print(snapshot.data);
-
-                           return ItemList(list: snapshot.data!);
-
-                         }
-                         return Text("No Forums Available",style: TextStyle(
-                                    color: Colors.white,
-                                     fontSize: 30,
-
-                         ),);
-
-                       },
-                     ),
-                     SizedBox(height: 30),
 
 
 
 
 
-                   ],
-                 ),
-               ),
              )
 
 
@@ -169,16 +183,6 @@ class ItemList extends StatelessWidget {
       context,
       MaterialPageRoute(builder: (context) => ForumPage(forumResource: forumResource,)),
     );
-    /*final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ForumCreate()),
-    );*/
-
-
-
-    if (result) {
-
-    }
   }
 
   @override

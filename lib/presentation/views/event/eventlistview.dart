@@ -64,7 +64,9 @@ class _EventListViewState extends State<EventListView> {
                   fit: BoxFit.cover
               )
           ),
-          child: Padding(
+          child:
+
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
             child:Column(
               children: <Widget>[

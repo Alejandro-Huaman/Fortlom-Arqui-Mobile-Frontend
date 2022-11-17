@@ -253,37 +253,53 @@ class _PostScreenState extends State<PostScreen> {
                                   Center(
                                     child:Text(
                                       "Metodo para conseguir imagen",
+                                      textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        fontSize: 20
+                                        fontSize: 40,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700
                                       ),
                                     ),
                                   ),
                                   SizedBox(height: 20,),
-                                  ElevatedButton.icon(
-                                      onPressed: (){
-                                        pickImagefromGallery();
-                                      },
-                                      icon: Icon(
-                                        Icons.image_outlined,
-                                        size: 24.0,
-                                      ),
-                                      label: Text("Galeria")
+                                  Container(
+                                    width: 300,
+                                    height: 60,
+                                    child: ElevatedButton.icon(
+                                        onPressed: (){
+                                          pickImagefromGallery();
+                                        },
+                                        icon: Icon(
+                                          Icons.image_outlined,
+                                          size: 40.0,
+                                        ),
+                                        label: Text("Galeria",style: TextStyle(
+                                          fontSize: 30
+                                        ),)
 
 
+                                    ),
                                   ),
-                                  SizedBox(height: 10,),
-                                  ElevatedButton.icon(
-                                      onPressed: (){
-                                        pickImagefromCamera();
-                                      },
-                                      icon: Icon(
-                                        Icons.camera_alt_outlined,
-                                        size: 24.0,
-                                      ),
-                                      label: Text("Camara")
+                                  SizedBox(height: 30,),
+                                  Container(
+                                    width: 300,
+                                    height: 60,
+                                    child:  ElevatedButton.icon(
+                                        onPressed: (){
+                                          pickImagefromCamera();
+                                        },
+                                        icon: Icon(
+                                          Icons.camera_alt_outlined,
+                                          size: 40.0,
+                                        ),
+                                        label: Text("Camara",style: TextStyle(
+                                          fontSize: 30
+                                        ),)
 
 
+                                    ),
                                   ),
+
                                   SizedBox(height: 30,),
 
                                 ],
@@ -330,7 +346,7 @@ class _PostScreenState extends State<PostScreen> {
               fit: BoxFit.cover,
             )
                 :
-                Text("Esperando Imagen")
+                Text("")
 
 
            

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fortloom/domain/entities/EventResource.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/service/ImageUserService.dart';
@@ -46,6 +47,7 @@ class _EventState extends State<Event> {
     return Padding(
         padding: EdgeInsets.all(10),
         child: Card(
+            color: Color(0xffcca027),
             child: ListTile(
               title: Row(
                 children: <Widget>[
@@ -59,12 +61,34 @@ class _EventState extends State<Event> {
               subtitle: Column(
                 children: <Widget>[
                   SizedBox(height: 20,),
-                  Text(widget.event.name,style: TextStyle(
-                      fontSize: 20,
-                    color: Colors.black
-                  ),),
+                  Container(
+                    width: 400,
+                    color: Colors.black,
+                    child:
+                    Text(widget.event.name.toUpperCase(),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+
+
+                    ),),
+                  ),
+
                   SizedBox(height: 10,),
                   Text(widget.event.description),
+                  SizedBox(height: 10,),
+                  if(widget.event.releasedDate!=null)...[
+                    Align(
+                     alignment: Alignment.topLeft,
+                      child: Text(DateFormat('yyyy-MM-dd').format(widget.event.releasedDate as DateTime)),
+                    ),
+
+                  ] else...[
+                    Text("No Time"),
+                  ],
+
                   SizedBox(height: 10,),
                   Eventlikes(contentid: widget.event.id),
                   SizedBox(height: 5,),

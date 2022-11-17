@@ -1,4 +1,5 @@
 import 'package:fortloom/core/framework/globals.dart';
+import 'package:fortloom/core/service/AuthService.dart';
 import 'package:fortloom/presentation/widgets/screenBase.dart';
 import 'package:fortloom/presentation/widgets/sideBar/navigationBloc.dart';
 import 'package:flutter/material.dart';
@@ -15,16 +16,51 @@ class HomeScreen extends StatefulWidget with NavigationStates {
 
 class _HomeScreenState extends State<HomeScreen> {
 
+  final AuthService authService= new AuthService();
+  bool isfanatic=false;
+  @override
+  void initState() {
+
+    super.initState();
+    String tep;
+    this.authService.getToken().then((result){
+
+      setState(() {
+        tep = result.toString();
+        this.isfanatic= this.authService.isfanatic(tep);
+
+
+      });
+
+
+
+    });
+
+
+
+
+  }
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Image.asset(
-          "assets/imgs/welcomeartist.png",
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          fit: BoxFit.fill,
-        ),
+        if(this.isfanatic)...[
+
+          Image.asset(
+            "assets/imgs/Welcome_fanatic.png",
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            fit: BoxFit.fill,
+          ),
+        ]else ...[
+          Image.asset(
+            "assets/imgs/Welcome_artist.png",
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            fit: BoxFit.fill,
+          ),
+        ],
+
 
         Scaffold(
           backgroundColor: Colors.transparent,
@@ -41,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
 
           floatingActionButton:FloatingActionButton(
-            elevation: 50,
+            elevation: 70,
             backgroundColor: Colors.black,
             onPressed: () {
               Navigator.push(

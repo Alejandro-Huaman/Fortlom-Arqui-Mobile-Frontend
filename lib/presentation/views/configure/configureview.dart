@@ -46,7 +46,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String username="Usuario";
   bool isartist=false;
   bool isupgrade=false;
-  ArtistResource artistResource= new ArtistResource(0, "username", "realname", "lastname", "email", "password", 0, "instagramLink", "facebookLink", "twitterLink");
+  ArtistResource artistResource= new ArtistResource(0, "username", "realname", "lastname", "email", "password", 0, "instagramLink", "facebookLink", "twitterLink","aboutMe");
   PersonResource personResource= new PersonResource(0, "username", "realname", "lastname", "email", "password");
   ImageResource imageResource=new ImageResource(0, "https://cdn.discordapp.com/attachments/1008578583251406990/1031677299101286451/unknown.png", 0, "0", 0);
   Future<void> _pullRefresh() async {
