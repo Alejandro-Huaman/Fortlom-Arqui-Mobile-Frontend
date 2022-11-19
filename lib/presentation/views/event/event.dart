@@ -65,7 +65,7 @@ class _EventState extends State<Event> {
                     width: 400,
                     color: Colors.black,
                     child:
-                    Text(widget.event.name.toUpperCase(),
+                    Text(widget.event.name.toUpperCase().trim(),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 20,

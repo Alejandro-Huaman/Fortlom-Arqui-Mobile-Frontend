@@ -32,7 +32,7 @@ class _ChatState extends State<Chat> {
   final EventService eventService = EventService();
   final FanaticService fanaticService = FanaticService();
   EventResource eventResource = EventResource(0, "name", "description", DateTime.now(),
-      new ArtistResource(0, "username", "realname", "lastname", "email@gmail.com", "password", 0, null, null, null) , 0, "ticketLink", DateTime.now());
+      new ArtistResource(0, "username", "realname", "lastname", "email@gmail.com", "password", 0, null, null, null,"aa") , 0, "ticketLink", DateTime.now());
   ForumResource forumResource = ForumResource(0, "forumname", "forumdescription", "forumrules",new PersonResource(0, "username", "realname", "lastname", "email@gmail.com", "password"));
   final ForumService forumService = ForumService();
   var auxlinks = [];
