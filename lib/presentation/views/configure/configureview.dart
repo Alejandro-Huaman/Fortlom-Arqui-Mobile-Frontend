@@ -297,15 +297,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           SizedBox(
                             height: 15,
                           ),
-                          Center(
-                            child: Wrap(
-                                children: [
-                                  buildSocialNetwork(1),
-                                  buildSocialNetwork(2),
-                                  buildSocialNetwork(3),
-                                ]
+                          if(this.isartist)...[
+                            Center(
+                              child: Wrap(
+                                  children: [
+                                    buildSocialNetwork(1),
+                                    buildSocialNetwork(2),
+                                    buildSocialNetwork(3),
+                                  ]
+                              ),
                             ),
-                          ),
+                          ],
                           SizedBox(
                             height: 35,
                           ),

@@ -113,25 +113,26 @@ class _SettingsPageState extends State<SettingsPage> {
               fontSize: 25, fontWeight: FontWeight.w500),
             ),
             SizedBox(height: 40,),
-            Row(
-              children: [
-                Icon(Icons.person,
-                  color: Colors.black,
-                ),
-                SizedBox(width: 8,),
-                Text("Account",
-                  style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            Divider(height: 15,
-              thickness: 2,
-            ),
-            SizedBox(
-              height: 10,
-            ),
+
             if(widget.isartist||widget.isupgrade)...[
+              Row(
+                children: [
+                  Icon(Icons.person,
+                    color: Colors.black,
+                  ),
+                  SizedBox(width: 8,),
+                  Text("Account",
+                    style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              Divider(height: 15,
+                thickness: 2,
+              ),
+              SizedBox(
+                height: 10,
+              ),
                buildAcountOptionRow(context, "Manage tags"),
                buildAccountSocial(context, "Social"),
                if(widget.isartist)...[
@@ -336,11 +337,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   builder: (BuildContext context){
                         return AlertDialog(
                              content: Column(
-                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                               mainAxisAlignment: MainAxisAlignment.center,
                                children: [
-                                 UpgradeOption("13/week"),
-                                 UpgradeOption("30/month"),
-                                 UpgradeOption("70/year"),
+                                 UpgradeOption("S/13/week"),
+                                 UpgradeOption("S/30/month"),
+                                 UpgradeOption("S/70/year"),
                                ],
                              ),
 

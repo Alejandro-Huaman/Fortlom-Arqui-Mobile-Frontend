@@ -116,6 +116,7 @@ class _ForumPageState extends State<ForumPage> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.black,
           elevation: 3,
@@ -138,6 +139,7 @@ class _ForumPageState extends State<ForumPage> {
         ),
         body: Container(
           height: ScreenWH(context).height,
+          width: ScreenWH(context).width,
           decoration: BoxDecoration(
               image: DecorationImage(
                   image: NetworkImage("https://cdn.discordapp.com/attachments/1011046180064604296/1041115572852752465/artistlist.jpg"),
@@ -258,7 +260,8 @@ class _ForumPageState extends State<ForumPage> {
                       return itemList(list: snapshot.data,report: this.report,personResource: this.personResource,);
 
                     }
-                    return Text("No Comments Available");
+                    return Text("No Comments Available",
+                     );
 
                   },
                 ),

@@ -217,6 +217,16 @@ class _SideBarState extends State<SideBar>
                          dividerLine(),
                     ],
                     MenuItemS(
+                      icon: Icons.album,
+                      title: "Album",
+                      onTap: () {
+                        onIconPressed();
+                        BlocProvider.of<NavigationBloc>(context)
+                            .add(NavigationEvents.AlbumScreenClickedEvent);
+                      },
+                    ),
+                    dividerLine(),
+                    MenuItemS(
                       icon: Icons.settings,
                       title: "Configure",
                       onTap: () {
@@ -278,7 +288,7 @@ class _SideBarState extends State<SideBar>
 
   Widget dividerLine() {
     return const Divider(
-      height: 10,
+      height: 8,
       thickness: 2.5,
       color: Colors.white,
       // indent: 0,
