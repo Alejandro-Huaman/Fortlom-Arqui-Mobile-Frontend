@@ -297,7 +297,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           SizedBox(
                             height: 15,
                           ),
-                          if(this.isartist)...[
+                          if(this.isartist||this.isupgrade)...[
                             Center(
                               child: Wrap(
                                   children: [
